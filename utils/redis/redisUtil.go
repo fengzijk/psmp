@@ -44,21 +44,18 @@ func SetObj(key string, value interface{}) bool {
 
 }
 
-func GetObj(key string, value interface{}) interface{} {
+func GetObj(key string, value interface{}) {
 
 	var result = value
 	cmr, err := config.RedisDb.Get(config.Ctx, key).Result()
 
 	if err != nil {
-		log.Fatal(err)
-		return nil
+		log.Println(err)
 	}
 
 	err = json.Unmarshal([]byte(cmr), &result)
 	if err != nil {
-		log.Fatal(nil)
-		return nil
+		log.Println(err)
 	}
-	return result
 
 }

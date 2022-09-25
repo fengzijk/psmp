@@ -8,7 +8,6 @@ import (
 	"short-url/config"
 	"short-url/mapper"
 	"short-url/router"
-	"short-url/utils/short"
 )
 
 func init() {
@@ -24,10 +23,6 @@ func init() {
 }
 
 func main() {
-
-	param := short.GetShortParam("11111111gzf")
-
-	fmt.Println(param)
 	// 测试redis
 	//fmt.Println(redis.Get("12222"))
 	//redis.SetObj("111111", entity.ShortURL{ShortUrl: "11111", LongUrl: "11111111111"})

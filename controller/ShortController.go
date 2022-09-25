@@ -25,10 +25,10 @@ func Redirect() gin.HandlerFunc {
 		url := context.Request.URL
 		var short entity.ShortURL
 		short.ShortParam = shortUtil.GetMd5Code(url.String())
-		result := service.FindShortByEntity(short)
-
-		if result.RedirectUrl != "" {
-			context.Redirect(http.StatusMovedPermanently, result.RedirectUrl)
-		}
+		//result := service.FindShortByEntity(short)
+		//
+		//if result.RedirectUrl != "" {
+		//	context.Redirect(http.StatusMovedPermanently, result.RedirectUrl)
+		//}
 	}
 }
