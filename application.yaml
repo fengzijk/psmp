@@ -1,0 +1,17 @@
+server:
+  port: 8080
+mysql:
+  username: root
+  password: 123456
+  host: 192.168.2.11
+  port: 3306
+  database: short_url
+
+redis:
+  address: 192.168.2.11:6379
+  database: 0
+  password: 123456
+short:
+  prefix: https://localhost:8080
+  length: 8
+
