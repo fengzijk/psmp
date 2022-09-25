@@ -1,9 +1,17 @@
 package entity
 
-import "gorm.io/gorm"
+import "time"
 
 type ShortURL struct {
-	gorm.Model
-	ShortUrl string
-	LongUrl  string
+	ID          int64 `gorm:"primarykey;autoIncrement:false"`
+	Md5Code     string
+	LongParam   string
+	ShortParam  string
+	RedirectUrl string
+	BizType     string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
+
+// TableName 表名
+func (ShortURL) TableName() string { return "short_param_url" }

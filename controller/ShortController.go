@@ -7,6 +7,7 @@ import (
 	"short-url/pojo/entity"
 	"short-url/pojo/response"
 	"short-url/service"
+	shortUtil "short-url/utils/short"
 )
 
 type Response gin.H
@@ -27,12 +28,11 @@ func Redirect() gin.HandlerFunc {
 	return func(context *gin.Context) {
 		url := context.Request.URL
 		var short entity.ShortURL
-		short.ShortUrl = url.String()
+		short.ShortParam = shortUtil.GetMd5Code(url.String())
 		result := service.FindShortByEntity(short)
 
-		if result.LongUrl != "" {
-			context.Redirect(http.StatusMovedPermanently, result.LongUrl)
+		if result.RedirectUrl != "" {
+			context.Redirect(http.StatusMovedPermanently, result.RedirectUrl)
 		}
 	}
-
 }

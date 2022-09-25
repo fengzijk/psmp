@@ -2,6 +2,7 @@ package utils
 
 import (
 	"errors"
+	"log"
 	"time"
 )
 
@@ -17,12 +18,14 @@ var (
 	lastStamp      int64 = -1
 )
 
-func NextId() (int64, error) {
+func NextId() int64 {
 	currentStamp := time.Now().UnixNano() / 1e6 // 当前是时间戳（毫秒）
 	// 当前时间小于最后生成的时间
 	if currentStamp < lastStamp {
 		err := errors.New("时钟已经回拨")
-		return 0, err
+		log.Fatal(err)
+		return 0
+
 	}
 	// 当前时间等于最后生成时间，阻塞获取下一毫秒
 	if currentStamp == lastStamp {
@@ -34,7 +37,7 @@ func NextId() (int64, error) {
 	// 修改最后生成时间
 	lastStamp = currentStamp
 
-	return (currentStamp-startTimestamp)<<timestampLeft | machineIdPart | sequence, nil
+	return (currentStamp-startTimestamp)<<timestampLeft | machineIdPart | sequence
 }
 
 func getNextMill() int64 {
