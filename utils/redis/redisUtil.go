@@ -53,6 +53,10 @@ func GetObj(key string, value interface{}) {
 		log.Println(err)
 	}
 
+	if cmr == "" {
+		cmr = "{}"
+	}
+
 	err = json.Unmarshal([]byte(cmr), &result)
 	if err != nil {
 		log.Println(err)
