@@ -24,7 +24,7 @@ func CreateShort(param string, bizType string) string {
 
 	md5Code := shortUtil.Get16MD5Encode(param)
 	shortParam := shortUtil.GetShortParam(param)
-	redisCacheKey := cacheKey + md5Code
+	redisCacheKey := cacheKey + shortParam
 
 	// 缓存中查
 	redis.GetObj(redisCacheKey, &urlEntity)
@@ -57,7 +57,17 @@ func CreateShort(param string, bizType string) string {
 	return viper.GetString("short.prefix") + "/" + shortInfo.RedirectUrl
 }
 
-// FindShortByEntity 根据实体查询短连接
-func FindShortByEntity(param entity.ShortURL) entity.ShortURL {
-	return mapper.SelectShortUrlInfoByParam(param.ShortParam, param.BizType)
+// FindShortByByShortParam 根据实体查询短连接
+func FindShortByByShortParam(shortParam string) entity.ShortURL {
+
+	var urlEntity entity.ShortURL
+
+	redisCacheKey := cacheKey + shortParam
+	redis.GetObj(redisCacheKey, &urlEntity)
+
+	if urlEntity.LongParam == "" || urlEntity.BizType == "url" {
+		urlEntity = mapper.SelectShortUrlInfoByShortParam(shortParam)
+	}
+
+	return urlEntity
 }
