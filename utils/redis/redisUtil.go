@@ -20,7 +20,7 @@ func Get(key string) string {
 
 }
 
-func Set(key string, value string) {
+func Set(key string, value string) bool {
 	if len(key) != 0 && "" != key && value != "" {
 
 		set := config.RedisDb.Set(config.Ctx, key, value, time.Duration(-1))
@@ -28,35 +28,37 @@ func Set(key string, value string) {
 		if err != nil {
 			log.Println(err)
 		}
-		log.Println(result)
+		return result == "OK"
 	}
-
+	return false
 }
-func SetObj(key string, value interface{}) {
+func SetObj(key string, value interface{}) bool {
 	doctorJson, _ := json.Marshal(value)
 	set := config.RedisDb.Set(config.Ctx, key, doctorJson, time.Duration(-1))
 
 	result, err := set.Result()
 	if err != nil {
-		log.Println(err)
+		log.Fatal(err)
 	}
-	log.Println(result)
+	return result == "OK"
 
 }
 
 func GetObj(key string, value interface{}) interface{} {
 
-	var re = value
-	result, err := config.RedisDb.Get(config.Ctx, key).Result()
+	var result = value
+	cmr, err := config.RedisDb.Get(config.Ctx, key).Result()
 
 	if err != nil {
 		log.Fatal(err)
-	}
-
-	err = json.Unmarshal([]byte(result), &re)
-	if err != nil {
 		return nil
 	}
-	return re
+
+	err = json.Unmarshal([]byte(cmr), &result)
+	if err != nil {
+		log.Fatal(nil)
+		return nil
+	}
+	return result
 
 }
