@@ -1,3 +1,3 @@
 # short-url
 
-go 练习 一个短链接 整理结构 
+go 练习项目 集成了 MySQL看 redis 等
