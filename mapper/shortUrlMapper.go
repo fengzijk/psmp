@@ -52,7 +52,7 @@ func SelectShortUrlInfoByParam(param string, paramType string) entity.ShortURL {
 
 func SelectShortUrlInfoByMd5Code(md5code string) entity.ShortURL {
 	var shortURL entity.ShortURL
-	dbRes := db.Model(&entity.ShortURL{}).Where("md5_code=? and biz_type=?", md5code).First(&shortURL)
+	dbRes := db.Model(&entity.ShortURL{}).Where("md5_code=? ", md5code).First(&shortURL)
 
 	err := dbRes.Error
 	if err != nil {

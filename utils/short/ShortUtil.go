@@ -26,6 +26,11 @@ func GetMd5Code(key string) string {
 	return hex.EncodeToString(m.Sum(nil))
 }
 
+// Get16MD5Encode 返回一个16位md5加密后的字符串
+func Get16MD5Encode(data string) string {
+	return GetMd5Code(data)[8:24]
+}
+
 func GetShortParam(key string) string {
 
 	var res [4]string
