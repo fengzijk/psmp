@@ -1,0 +1,37 @@
+# Created by .ignore support plugin (hsz.mobi)
+
+**/target/*
+.mvn/*
+.settings/*
+.classpath
+.project
+*.class
+*.jar
+*.rar
+*.tar
+*.zip
+#**/bootstrap.yml
+### STS ###
+.apt_generated
+.factorypath
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+**/log/*
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+/target/
+*.log
+/log/
+**/test/*
