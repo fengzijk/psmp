@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/catinello/base62"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"math/rand"
 	"short-url/mapper"
 	"short-url/pojo/entity"
@@ -43,7 +44,8 @@ func CreateShort(longUrl string) string {
 	if err != nil {
 		return ""
 	}
-	return shortUrl
+
+	return "short :" + viper.GetString("short.prefix") + shortUrl
 }
 
 // FindShortByEntity 根据实体查询短连接
