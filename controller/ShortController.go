@@ -15,7 +15,6 @@ func CreateShort(c *gin.Context) {
 
 	content := c.Param("param")
 	fmt.Print(content)
-	//	content := c.PostForm("content")
 
 	shortUrl := service.CreateShort(content)
 
@@ -28,6 +27,7 @@ func CreateShort(c *gin.Context) {
 	})
 }
 
+// 重定向
 func Redirect() gin.HandlerFunc {
 	return func(context *gin.Context) {
 		url := context.Request.URL
