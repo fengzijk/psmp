@@ -28,6 +28,7 @@ func Redirect(c *gin.Context) {
 	if shortEntry.RedirectUrl != "" && shortEntry.BizType == "url" {
 		c.Redirect(http.StatusMovedPermanently, "https://"+shortEntry.LongParam)
 	} else {
+
 		c.Redirect(http.StatusMovedPermanently, viper.GetString("short.prefix"))
 	}
 }
