@@ -12,6 +12,6 @@ redis:
   database: 0
   password: 123456
 short:
-  prefix: https://localhost:8080
+  prefix: http://localhost:8080
   length: 8
 

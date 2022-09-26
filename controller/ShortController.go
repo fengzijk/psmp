@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"net/http"
 	"short-url/pojo/response"
 	"short-url/service"
@@ -20,11 +21,13 @@ func CreateShort(c *gin.Context) {
 // Redirect 重定向
 func Redirect(c *gin.Context) {
 
-	shortParam := c.Param("pname")
+	shortParam := c.Param("param")
 
 	shortEntry := service.FindShortByByShortParam(shortParam)
 
 	if shortEntry.RedirectUrl != "" && shortEntry.BizType == "url" {
-		c.Redirect(http.StatusMovedPermanently, shortEntry.LongParam)
+		c.Redirect(http.StatusMovedPermanently, "https://"+shortEntry.LongParam)
+	} else {
+		c.Redirect(http.StatusMovedPermanently, viper.GetString("short.prefix"))
 	}
 }
