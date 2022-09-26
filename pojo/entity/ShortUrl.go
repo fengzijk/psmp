@@ -3,6 +3,7 @@ package entity
 import "time"
 
 type ShortURL struct {
+	// 主键id
 	ID          int64 `gorm:"primarykey;autoIncrement:false"`
 	Md5Code     string
 	LongParam   string

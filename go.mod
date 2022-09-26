@@ -3,8 +3,8 @@ module short-url
 go 1.19
 
 require (
-	github.com/catinello/base62 v0.0.0-20210103152244-29b605f01e9b
 	github.com/gin-gonic/gin v1.8.1
+	github.com/go-redis/redis/v8 v8.11.5
 	github.com/jinzhu/gorm v1.9.16
 	github.com/spf13/viper v1.13.0
 	gorm.io/driver/mysql v1.3.6
@@ -19,7 +19,6 @@ require (
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.11.1 // indirect
-	github.com/go-redis/redis/v8 v8.11.5 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/goccy/go-json v0.9.11 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
