@@ -46,6 +46,6 @@ func initConfig() {
 			log.Println("读取application文件错误")
 		}
 
-		log.Fatal(err)
+		log.Println(err)
 	}
 }

@@ -13,7 +13,7 @@ func Get(key string) string {
 	result, err := config.RedisDb.Get(config.Ctx, key).Result()
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	return result
@@ -38,7 +38,7 @@ func SetObj(key string, value interface{}) bool {
 
 	result, err := set.Result()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	return result == "OK"
 

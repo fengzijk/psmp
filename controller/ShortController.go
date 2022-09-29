@@ -1,9 +1,11 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"net/http"
+	"short-url/pojo/request"
 	"short-url/pojo/response"
 	"short-url/service"
 )
@@ -12,10 +14,22 @@ type Response gin.H
 
 func CreateShort(c *gin.Context) {
 
-	content := c.Param("param")
-	shortUrl := service.CreateShort(content, "url")
+	content := request.ShortContentRequest{}
+	err := c.BindJSON(&content)
+	if err != nil {
+		c.JSON(http.StatusAlreadyReported, *response.Fail("失败"))
+	}
 
-	c.JSON(http.StatusOK, *response.Success(shortUrl))
+	fmt.Print(content)
+
+	shortUrl := service.CreateShort(content.Content, content.BizType)
+
+	resp := response.Result{
+		Code: 200,
+		Msg:  "OK",
+		Data: shortUrl,
+	}
+	c.JSON(http.StatusOK, &resp)
 }
 
 // Redirect 重定向

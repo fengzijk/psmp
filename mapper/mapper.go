@@ -12,7 +12,7 @@ func InitGormDB() {
 
 	initDb, err := config.InitDb()
 	if err != nil {
-		log.Fatal("初始化mySql失败:{}", err)
+		log.Println("初始化mySql失败:{}", err)
 		return
 	}
 	db = initDb

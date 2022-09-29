@@ -23,7 +23,7 @@ func NextId() int64 {
 	// 当前时间小于最后生成的时间
 	if currentStamp < lastStamp {
 		err := errors.New("时钟已经回拨")
-		log.Fatal(err)
+		log.Println(err)
 		return 0
 
 	}

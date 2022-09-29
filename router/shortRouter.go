@@ -8,7 +8,7 @@ import (
 func ShortRouter(router *gin.Engine) {
 	routerGroup := router.Group("/st")
 	{
-		routerGroup.POST("/create/:param", controller.CreateShort)
+		routerGroup.POST("/create", controller.CreateShort)
 		routerGroup.GET("/:param", controller.Redirect)
 	}
 
