@@ -58,6 +58,6 @@ func GetShortParam(key string) string {
 	}
 
 	rand.Seed(time.Now().UnixNano())
-	r := rand.Intn(1) + 3
+	r := rand.Intn(3)
 	return res[r]
 }

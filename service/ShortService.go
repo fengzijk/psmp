@@ -16,9 +16,11 @@ type Response gin.H
 
 const (
 	path     = "st"
-	cacheKey = "short:"
+	cacheKey = "short:md5code:"
 	http     = "http://"
 	https    = "https://"
+
+	cacheShortKey = "short:key:"
 )
 
 // CreateShort 生成短连接
@@ -34,15 +36,13 @@ func CreateShort(param string, bizType string) string {
 
 	// https 截取
 	if strings.HasPrefix(param, http) || strings.HasPrefix(param, https) {
-		param = strings.ReplaceAll(param, http, "")
-		param = strings.ReplaceAll(param, https, "")
 		bizType = enum.BizTypeEnum.GetMsg(2)
 	}
 
 	md5Code := shortUtil.Get16MD5Encode(param)
 	shortParam := shortUtil.GetShortParam(param)
 
-	redisCacheKey := cacheKey + shortParam
+	redisCacheKey := cacheKey + md5Code
 
 	// 缓存中查
 	redis.GetObj(redisCacheKey, &urlEntity)
@@ -57,11 +57,10 @@ func CreateShort(param string, bizType string) string {
 		redis.SetObj(redisCacheKey, urlEntity)
 
 		if urlEntity.BizType == enum.BizTypeEnum.GetMsg(2) {
-			// 新增
-			result = fmt.Sprintf("%s/%s/%s", viper.GetString("short.prefix"), path, shortParam)
+			result = fmt.Sprintf("%s/%s/%s", viper.GetString("short.prefix"), path, urlEntity.ShortParam)
 
 		} else {
-			result = shortParam
+			result = urlEntity.ShortParam
 		}
 
 		return result
@@ -95,11 +94,17 @@ func FindShortByByShortParam(shortParam string) entity.ShortURLEntity {
 
 	var urlEntity entity.ShortURLEntity
 
-	redisCacheKey := cacheKey + shortParam
+	redisCacheKey := cacheShortKey + shortParam
 	redis.GetObj(redisCacheKey, &urlEntity)
 
-	if urlEntity.LongParam == "" || urlEntity.BizType == enum.BizTypeEnum.GetMsg(2) {
+	if urlEntity.ID != 0 {
+		return urlEntity
+	} else {
 		urlEntity = mapper.SelectShortUrlInfoByShortParam(shortParam)
+	}
+
+	if urlEntity.ID != 0 {
+		redis.SetObj(redisCacheKey, urlEntity)
 	}
 
 	return urlEntity

@@ -32,7 +32,7 @@ func main() {
 	//fmt.Println(user.LongUrl)
 	initRouter := router.InitRouter()
 
-	initRouter.LoadHTMLFiles("templates/index.html")
+	initRouter.LoadHTMLFiles("templates/index.html", "templates/favicon.ico")
 	_ = initRouter.Run(fmt.Sprintf(":%s", viper.GetString("server.port")))
 
 }

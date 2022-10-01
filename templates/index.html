@@ -22,9 +22,22 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="alert alert-success" id="url" role="alert">
+            <div id="resultDiv" role="alert">
+
+                <div class="alert alert-success" id="result" hidden>
+                </div>
+
+                <div>
+                    <!-- 表示一个成功的或积极的动作 -->
+                    <button class="btn btn-success" id="jump" onclick="jump()" type="button" hidden>跳转</button>
+                </div>
+            </div>
+
+            <div class="alert alert-danger alert-dismissable" hidden id="error" role="alert">
 
             </div>
+
+
         </div>
     </div>
 </div>
@@ -33,50 +46,48 @@
 <script>
     function buildUrl() {
         let d = document.getElementById('input')
-        let content = "";
+
+
         if (d.value.length < 5) {
             alert("输入的url必须大于4位字符串")
             return
         }
 
-      //
-      // var Expression=/[\w-]+(\/[\w- .\/?%&=]*)?/;
-      //
-      // var objExp=new RegExp(Expression);
-      //
-      // if(objExp.test(d) !== true) {
-      //
-      //   alert("网址格式不正确！请重新输入");
-      //   return;
-      // }
-
-
-
-        if (d.value.startsWith("https") || d.value.startsWith("http")) {
-            content = d.value.replace("https://", "")
-            content = d.value.replace("http://", "")
-
-
-        } else {
-            content = d.value
+        if (!(d.value.startsWith("https://") || d.value.startsWith("http://"))) {
+            alert("网址格式不正确！请重新输入");
         }
-
 
         $.ajax({
             type: 'POST',
             contentType: 'application/json; charset=utf-8',
-            url: "http://s.fengzijk.cn/st/create",
-            data: JSON.stringify({"content": content, "bizType": 2}),
+            url: "http://127.0.0.1:8080/st/create",
+            data: JSON.stringify({"content": d,value, "bizType": 2}),
             success: function (d) {
-                document.getElementById('url').innerText = "短链地址" + d.data
+                document.getElementById('result').innerText = "短链地址" + ":" + d.data
+                $("#result").prop("hidden", false);
+                $("#jump").prop("hidden", false);
+                jumpUrl = d.data
             },
             error: function (e) {
-                document.getElementById('url').innerText = "请求出错，请稍后再试\n" + JSON.stringify(e)
+                document.getElementById('error').innerText = "请求出错，请稍后再试\n" + JSON.stringify(e)
+                $("#error").prop("hidden", false);
             },
             dataType: "json",
 
         }, 'json');
     }
+
+    function jump() {
+        window.location.href = jumpUrl;
+    }
+
+
+    $(function () {
+
+        var jumpUrl;
+
+
+    })
 </script>
 </body>
 </html>

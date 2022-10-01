@@ -3,7 +3,6 @@ package controller
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
 	"net/http"
 	"short-url/enum"
 	"short-url/pojo/request"
@@ -46,6 +45,7 @@ func Redirect(c *gin.Context) {
 			//c.Request.URL = shortEntry.LongParam
 			//c.h
 			c.Redirect(http.StatusMovedPermanently, shortEntry.LongParam)
+
 		} else {
 			resp := response.Result{
 				Code: 200,
@@ -55,6 +55,4 @@ func Redirect(c *gin.Context) {
 			c.JSON(http.StatusOK, &resp)
 		}
 	}
-
-	c.JSON(http.StatusMovedPermanently, viper.GetString("short.prefix"))
 }
