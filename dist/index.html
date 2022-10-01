@@ -35,20 +35,20 @@
         let d = document.getElementById('input')
         let content = "";
         if (d.value.length < 5) {
-            alert("输入的url必须大于5位字符串")
+            alert("输入的url必须大于4位字符串")
             return
         }
 
-
-      var Expression=/[\w-]+(\/[\w- .\/?%&=]*)?/;
-
-      var objExp=new RegExp(Expression);
-
-      if(objExp.test(d) !== true) {
-
-        alert("网址格式不正确！请重新输入");
-        return;
-      }
+      //
+      // var Expression=/[\w-]+(\/[\w- .\/?%&=]*)?/;
+      //
+      // var objExp=new RegExp(Expression);
+      //
+      // if(objExp.test(d) !== true) {
+      //
+      //   alert("网址格式不正确！请重新输入");
+      //   return;
+      // }
 
 
 
