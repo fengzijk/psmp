@@ -40,10 +40,21 @@ func Redirect(c *gin.Context) {
 
 	shortEntry := service.FindShortByByShortParam(shortParam)
 
-	if shortEntry.LongParam != "" && shortEntry.BizType == enum.BizTypeEnum.GetMsg(2) {
-		c.Redirect(http.StatusMovedPermanently, shortEntry.LongParam)
-	} else {
+	if shortEntry.LongParam != "" {
 
-		c.Redirect(http.StatusMovedPermanently, viper.GetString("short.prefix"))
+		if shortEntry.BizType == enum.BizTypeEnum.GetMsg(2) {
+			//c.Request.URL = shortEntry.LongParam
+			//c.h
+			c.Redirect(http.StatusMovedPermanently, shortEntry.LongParam)
+		} else {
+			resp := response.Result{
+				Code: 200,
+				Msg:  "OK",
+				Data: shortEntry.LongParam,
+			}
+			c.JSON(http.StatusOK, &resp)
+		}
 	}
+
+	c.JSON(http.StatusMovedPermanently, viper.GetString("short.prefix"))
 }

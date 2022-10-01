@@ -15,6 +15,6 @@ func InitRouter() *gin.Engine {
 	UserLoginRouter(router)
 	// 缓存路由
 	//RedisRouter(router)
-
+	HomePageRouter(router)
 	return router
 }

@@ -30,7 +30,10 @@ func main() {
 	//user := entity.ShortURL{}
 	//redis.GetObj("11111", &user)
 	//fmt.Println(user.LongUrl)
-	_ = router.InitRouter().Run(fmt.Sprintf(":%s", viper.GetString("server.port")))
+	initRouter := router.InitRouter()
+
+	initRouter.LoadHTMLFiles("templates/index.html")
+	_ = initRouter.Run(fmt.Sprintf(":%s", viper.GetString("server.port")))
 
 }
 
