@@ -34,8 +34,9 @@ func CreateShort(param string, bizType string) string {
 
 	// https 截取
 	if strings.HasPrefix(param, http) || strings.HasPrefix(param, https) {
-		strings.ReplaceAll(param, http, "")
-		strings.ReplaceAll(param, https, "")
+		param = strings.ReplaceAll(param, http, "")
+		param = strings.ReplaceAll(param, https, "")
+		bizType = enum.BizTypeEnum.GetMsg(2)
 	}
 
 	md5Code := shortUtil.Get16MD5Encode(param)
@@ -52,10 +53,17 @@ func CreateShort(param string, bizType string) string {
 	}
 
 	// 存在返回结果
-	if urlEntity.ShortParam != "" && urlEntity.BizType == enum.BizTypeEnum.GetMsg(2) {
+	if urlEntity.ShortParam != "" {
 		redis.SetObj(redisCacheKey, urlEntity)
-		// 新增
-		result = fmt.Sprintf("%s/%s/%s", viper.GetString("short.prefix"), path, shortParam)
+
+		if urlEntity.BizType == enum.BizTypeEnum.GetMsg(2) {
+			// 新增
+			result = fmt.Sprintf("%s/%s/%s", viper.GetString("short.prefix"), path, shortParam)
+
+		} else {
+			result = shortParam
+		}
+
 		return result
 	}
 
@@ -71,7 +79,14 @@ func CreateShort(param string, bizType string) string {
 		return ""
 	}
 
-	result = fmt.Sprintf("%s/%s/%s", viper.GetString("short.prefix"), path, shortParam)
+	if shortInfo.BizType == enum.BizTypeEnum.GetMsg(2) {
+		// 链接
+		result = fmt.Sprintf("%s/%s/%s", viper.GetString("short.prefix"), path, shortParam)
+
+	} else {
+		result = shortParam
+	}
+
 	return result
 }
 

@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"net/http"
+	"short-url/enum"
 	"short-url/pojo/request"
 	"short-url/pojo/response"
 	"short-url/service"
@@ -22,7 +23,7 @@ func CreateShort(c *gin.Context) {
 
 	fmt.Print(content)
 
-	shortUrl := service.CreateShort(content.Content, content.BizType)
+	shortUrl := service.CreateShort(content.Content, enum.BizTypeEnum.GetMsg(enum.BizTypeEnum(content.BizType)))
 
 	resp := response.Result{
 		Code: 200,
@@ -39,8 +40,8 @@ func Redirect(c *gin.Context) {
 
 	shortEntry := service.FindShortByByShortParam(shortParam)
 
-	if shortEntry.RedirectUrl != "" && shortEntry.BizType == "url" {
-		c.Redirect(http.StatusMovedPermanently, "https://"+shortEntry.LongParam)
+	if shortEntry.LongParam != "" && shortEntry.BizType == enum.BizTypeEnum.GetMsg(2) {
+		c.Redirect(http.StatusMovedPermanently, shortEntry.LongParam)
 	} else {
 
 		c.Redirect(http.StatusMovedPermanently, viper.GetString("short.prefix"))
