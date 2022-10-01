@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"short-url/enum"
@@ -19,8 +18,6 @@ func CreateShort(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusAlreadyReported, *response.Fail("失败"))
 	}
-
-	fmt.Print(content)
 
 	shortUrl := service.CreateShort(content.Content, enum.BizTypeEnum.GetMsg(enum.BizTypeEnum(content.BizType)))
 
