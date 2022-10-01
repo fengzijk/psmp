@@ -1,17 +1,19 @@
 package service
 
 import (
+	"bytes"
 	"fmt"
+	"go-psmp/config"
+	"go-psmp/mapper"
+	"go-psmp/pojo/entity"
+	"go-psmp/pojo/request"
+	"go-psmp/utils/short"
 	"log"
 	"net/smtp"
-	"short-url/config"
-	"short-url/pojo/request"
 	"strings"
 )
 
-func SendToMail(sendUserName, to, subject, body, mailType string) {
-	var x = config.EmailConf
-	fmt.Println(x)
+func SendToMail(sendUserName, to, subject, body, mailType string) error {
 	user := config.EmailConf.User
 	password := config.EmailConf.Password
 	host := config.EmailConf.Host
@@ -20,7 +22,7 @@ func SendToMail(sendUserName, to, subject, body, mailType string) {
 	//fmt.Println(hp)
 	auth := smtp.PlainAuth("", user, password, hp[0])
 	var contentType string
-	if mailType == "html" {
+	if mailType == "HTML" {
 		contentType = "Content-Type: text/" + mailType + "; charset=UTF-8"
 	} else {
 		contentType = "Content-Type: text/plain" + "; charset=UTF-8"
@@ -29,18 +31,18 @@ func SendToMail(sendUserName, to, subject, body, mailType string) {
 	msg := []byte("To: " + to + "\r\nFrom: " + sendUserName + "<" + user + ">" + "\r\nSubject: " + subject + "\r\n" + contentType + "\r\n\r\n" + body)
 	sendTo := strings.Split(to, ";")
 	err := smtp.SendMail(host, auth, user, sendTo, msg)
-	fmt.Println(err)
+	return err
 }
 
-func PostMail(email request.SendEmailRequest) bool {
+func SaveMail(email request.SendEmailRequest) bool {
 
 	source := email.SystemName
 	if source != "monitor" {
 		fmt.Println("Send mail error!,source 认证失败")
 		return false
 	}
-	//println(json.Contacts)
-	to := email.Contacts
+
+	to := email.EmailTo
 	if to[0] == "" {
 		fmt.Println("Send mail error!,发送人为空")
 
@@ -66,12 +68,42 @@ func PostMail(email request.SendEmailRequest) bool {
 	sendUserName := "告警平台" //发送邮件的人名称
 	log.Println("send email")
 
-	for _, s := range to {
-		SendToMail(sendUserName, s, subject, body, "html")
-
-		log.Printf("接收人:%s \n 标题: %s \n 内容: %s \n", s, email.Subject, email.Content)
-
-	}
+	emailTo := getEmailToString(to)
+	saveEmailRecord(sendUserName, emailTo, subject, body, "HTML")
 
 	return true
+}
+
+func UpdateEmailSendSuccess(ids []int64) {
+	mapper.UpdateEmailSendSuccess(ids)
+}
+
+func saveEmailRecord(sendUserName, emailTo, subject, content, templateFlag string) {
+
+	// 构造发送邮件记录
+	insert := entity.EmailRecordEntity{
+		Md5Code:       short.Get16MD5Encode(sendUserName + emailTo + subject + content + templateFlag),
+		EmailFrom:     sendUserName,
+		EmailTo:       emailTo,
+		Subject:       subject,
+		Content:       content,
+		SendStatus:    "WAIT",
+		SendFailCount: 0,
+		TemplateFlag:  templateFlag,
+	}
+	_ = mapper.InsertEmailRecord(insert)
+}
+
+func UpdateEmailSendFail(failList []entity.EmailRecordEntity) {
+	mapper.UpdateEmailSendFail(failList)
+}
+
+func getEmailToString(to []string) string {
+	var bt bytes.Buffer
+	for _, s := range to {
+		bt.WriteString(s)
+		bt.WriteString(";")
+	}
+	return bt.String()
+
 }

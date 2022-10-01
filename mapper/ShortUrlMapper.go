@@ -2,9 +2,9 @@ package mapper
 
 import (
 	"fmt"
+	"go-psmp/pojo/entity"
+	"go-psmp/utils"
 	"gorm.io/gorm"
-	"short-url/pojo/entity"
-	"short-url/utils"
 )
 
 func InsertShortUrl(param entity.ShortURLEntity) error {

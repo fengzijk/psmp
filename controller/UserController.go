@@ -3,10 +3,10 @@ package controller
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"go-psmp/pojo/request"
+	"go-psmp/pojo/response"
+	"go-psmp/service"
 	"net/http"
-	"short-url/pojo/request"
-	"short-url/pojo/response"
-	"short-url/service"
 )
 
 func Login(c *gin.Context) {

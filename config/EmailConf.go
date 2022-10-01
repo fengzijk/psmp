@@ -3,7 +3,7 @@ package config
 import (
 	"fmt"
 	"github.com/spf13/viper"
-	"short-url/pojo/model"
+	"go-psmp/pojo/model"
 )
 
 var EmailConf model.EmailConfModel

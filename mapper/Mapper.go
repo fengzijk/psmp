@@ -1,9 +1,9 @@
 package mapper
 
 import (
+	"go-psmp/config"
 	"gorm.io/gorm"
 	"log"
-	"short-url/config"
 )
 
 var db *gorm.DB

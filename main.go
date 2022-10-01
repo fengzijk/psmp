@@ -4,16 +4,19 @@ import (
 	"fmt"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/spf13/viper"
+	"go-psmp/config"
+	"go-psmp/mapper"
+	"go-psmp/router"
+	"go-psmp/task"
 	"log"
-	"short-url/config"
-	"short-url/mapper"
-	"short-url/router"
 )
 
 func init() {
 
 	// 第一步  初始化配置
 	initConfig()
+
+	task.InitTask()
 
 	// 第二步 初始化数据库连接
 	mapper.InitGormDB()
@@ -49,4 +52,5 @@ func initConfig() {
 
 		log.Println(err)
 	}
+
 }

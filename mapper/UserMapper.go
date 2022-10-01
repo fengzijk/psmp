@@ -2,7 +2,7 @@ package mapper
 
 import (
 	"fmt"
-	"short-url/pojo/entity"
+	"go-psmp/pojo/entity"
 )
 
 func FindUserByUsername(username string) entity.User {

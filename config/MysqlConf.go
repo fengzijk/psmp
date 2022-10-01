@@ -29,7 +29,7 @@ func InitDb() (db *gorm.DB, err error) {
 
 	// SetConnMaxLifetime 设置了连接可复用的最大时间。
 	sqlDB.SetConnMaxLifetime(10 * time.Second)
-	//err = db.AutoMigrate(&entity.ShortURLEntity{})
+	//err = db.AutoMigrate(&entity.EmailRecordEntity{})
 	if err != nil {
 		return nil, err
 	}

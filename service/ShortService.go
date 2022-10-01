@@ -2,13 +2,14 @@ package service
 
 import (
 	"fmt"
+	"go-psmp/enum"
+	"go-psmp/mapper"
+	"go-psmp/pojo/entity"
+	"go-psmp/utils/redis"
+	"go-psmp/utils/short"
 
 	"github.com/spf13/viper"
-	"short-url/enum"
-	"short-url/mapper"
-	"short-url/pojo/entity"
-	"short-url/utils/redis"
-	shortUtil "short-url/utils/short"
+
 	"strings"
 )
 
@@ -37,8 +38,8 @@ func CreateShort(param string, bizType string) string {
 		bizType = enum.BizTypeEnum.GetMsg(2)
 	}
 
-	md5Code := shortUtil.Get16MD5Encode(param)
-	shortParam := shortUtil.GetShortParam(param)
+	md5Code := short.Get16MD5Encode(param)
+	shortParam := short.GetShortParam(param)
 
 	redisCacheKey := cacheKey + md5Code
 

@@ -3,8 +3,9 @@ package redis
 import (
 	"encoding/json"
 	_ "github.com/go-redis/redis/v8"
+	"go-psmp/config"
 	"log"
-	"short-url/config"
+
 	"time"
 )
 

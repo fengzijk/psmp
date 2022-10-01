@@ -2,12 +2,11 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-psmp/enum"
+	"go-psmp/pojo/request"
+	"go-psmp/pojo/response"
+	"go-psmp/service"
 	"net/http"
-	"short-url/enum"
-	"short-url/pojo/request"
-	"short-url/pojo/response"
-	"short-url/service"
-	_ "short-url/utils"
 )
 
 type Response gin.H
@@ -22,7 +21,10 @@ func CreateShort(c *gin.Context) {
 
 	shortUrl := service.CreateShort(content.Content, enum.BizTypeEnum.GetMsg(enum.BizTypeEnum(content.BizType)))
 
-	//	service.SendToMail("gzf", "guozhifengvip@163.com", "alarm", "http://baidu.com", "html")
+	to := []string{"guozhifengvip@163.com"}
+	var dto = request.SendEmailRequest{EmailTo: to, Subject: "aaaaa", Content: "http://baidu.com", SystemName: "monitor"}
+	//service.SaveMail("gzf", "guozhifengvip@163.com", "alarm", "http://baidu.com", "html")
+	service.SaveMail(dto)
 	resp := response.Result{
 		Code: 200,
 		Msg:  "OK",

@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"short-url/controller"
+	"go-psmp/controller"
 )
 
 func UserLoginRouter(router *gin.Engine) {

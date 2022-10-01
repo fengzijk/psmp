@@ -1,8 +1,8 @@
 package service
 
 import (
-	"short-url/mapper"
-	"short-url/pojo/request"
+	"go-psmp/mapper"
+	"go-psmp/pojo/request"
 )
 
 func LoginByUsername(loginReq request.UserLoginRequest) string {
