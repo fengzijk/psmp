@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>短链生成器</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="#">短链生成器</a>
+    </div>
+</nav>
+<div class="container">
+    <div class="card" style="margin-top: 80px">
+        <div class="card-body">
+            <div class="d-flex" role="search">
+                <label for="input"></label><input class="form-control me-2" id="input" placeholder="请输入你的URL"
+                                                  type="search">
+                <button class="btn btn-success" onclick="buildUrl()" style="width: 100px">生成</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-success" id="url" role="alert">
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js"></script>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<script>
+    function buildUrl() {
+        let d = document.getElementById('input')
+        let content = "";
+        if (d.value.length < 5) {
+            alert("输入的url必须大于5位字符串")
+            return
+        }
+
+
+      var Expression=/[\w-]+(\/[\w- .\/?%&=]*)?/;
+
+      var objExp=new RegExp(Expression);
+
+      if(objExp.test(d) !== true) {
+
+        alert("网址格式不正确！请重新输入");
+        return;
+      }
+
+
+
+        if (d.value.startsWith("https") || d.value.startsWith("http")) {
+            content = d.value.replace("https://", "")
+            content = d.value.replace("http://", "")
+
+
+        } else {
+            content = d.value
+        }
+
+
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            url: "http://s.fengzijk.cn/st/create",
+            data: JSON.stringify({"content": content, "bizType": "url"}),
+            success: function (d) {
+                document.getElementById('url').innerText = "短链地址" + d.data
+            },
+            error: function (e) {
+                document.getElementById('url').innerText = "请求出错，请稍后再试\n" + JSON.stringify(e)
+            },
+            dataType: "json",
+
+        }, 'json');
+    }
+</script>
+</body>
+</html>
