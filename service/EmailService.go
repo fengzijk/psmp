@@ -9,7 +9,13 @@ import (
 	"strings"
 )
 
-func SendToMail(user, sendUserName, password, host, to, subject, body, mailType string) error {
+func SendToMail(sendUserName, to, subject, body, mailType string) {
+	var x = config.EmailConf
+	fmt.Println(x)
+	user := config.EmailConf.User
+	password := config.EmailConf.Password
+	host := config.EmailConf.Host
+
 	hp := strings.Split(host, ":")
 	//fmt.Println(hp)
 	auth := smtp.PlainAuth("", user, password, hp[0])
@@ -23,15 +29,11 @@ func SendToMail(user, sendUserName, password, host, to, subject, body, mailType 
 	msg := []byte("To: " + to + "\r\nFrom: " + sendUserName + "<" + user + ">" + "\r\nSubject: " + subject + "\r\n" + contentType + "\r\n\r\n" + body)
 	sendTo := strings.Split(to, ";")
 	err := smtp.SendMail(host, auth, user, sendTo, msg)
-	//fmt.Println(err)
-	return err
+	fmt.Println(err)
 }
 
 func PostMail(email request.SendEmailRequest) bool {
 
-	user := config.EmailConf.UserName
-	password := config.EmailConf.Password
-	host := config.EmailConf.Host
 	source := email.SystemName
 	if source != "monitor" {
 		fmt.Println("Send mail error!,source 认证失败")
@@ -65,7 +67,7 @@ func PostMail(email request.SendEmailRequest) bool {
 	log.Println("send email")
 
 	for _, s := range to {
-		_ = SendToMail(user, sendUserName, password, host, s, subject, body, "html")
+		SendToMail(sendUserName, s, subject, body, "html")
 
 		log.Printf("接收人:%s \n 标题: %s \n 内容: %s \n", s, email.Subject, email.Content)
 

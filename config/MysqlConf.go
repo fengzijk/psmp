@@ -12,7 +12,6 @@ import (
 func InitDb() (db *gorm.DB, err error) {
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", viper.Get("mysql.username"), viper.GetString("mysql.password"), viper.Get("mysql.host"), viper.GetString("mysql.port"), viper.GetString("mysql.database"))
-	fmt.Println(dsn)
 	db, err = gorm.Open(mysql.Open(dsn),
 
 		&gorm.Config{})

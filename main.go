@@ -20,20 +20,18 @@ func init() {
 
 	// 第三步 初始化redis连接
 	config.InitRedisDb()
+
+	// 第四步 初始化邮件
+	config.InitEmail()
 }
 
 func main() {
-	// 测试redis
-	//fmt.Println(redis.Get("12222"))
-	//redis.SetObj("111111", entity.ShortURL{ShortUrl: "11111", LongUrl: "11111111111"})
-	//redis.Set("1111122222", "111133333")
-	//user := entity.ShortURL{}
-	//redis.GetObj("11111", &user)
-	//fmt.Println(user.LongUrl)
-	initRouter := router.InitRouter()
 
+	initRouter := router.InitRouter()
 	initRouter.LoadHTMLFiles("templates/index.html", "templates/favicon.ico")
-	_ = initRouter.Run(fmt.Sprintf(":%s", viper.GetString("server.port")))
+	port := viper.GetString("server.port")
+	fmt.Printf("监听端口:%s\n", port)
+	_ = initRouter.Run(fmt.Sprintf(":%s", port))
 
 }
 

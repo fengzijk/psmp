@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"short-url/enum"
@@ -9,7 +8,6 @@ import (
 	"short-url/pojo/response"
 	"short-url/service"
 	_ "short-url/utils"
-	"short-url/utils/monitor"
 )
 
 type Response gin.H
@@ -23,7 +21,8 @@ func CreateShort(c *gin.Context) {
 	}
 
 	shortUrl := service.CreateShort(content.Content, enum.BizTypeEnum.GetMsg(enum.BizTypeEnum(content.BizType)))
-	fmt.Print(monitor.GetCpuPercent())
+
+	//	service.SendToMail("gzf", "guozhifengvip@163.com", "alarm", "http://baidu.com", "html")
 	resp := response.Result{
 		Code: 200,
 		Msg:  "OK",

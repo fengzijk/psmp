@@ -1,7 +1,7 @@
 package model
 
 type EmailConfModel struct {
-	UserName string `json:"username"`
+	User     string `json:"user"`
 	Password string `json:"password"`
 	Host     string `json:"host"`
 }
