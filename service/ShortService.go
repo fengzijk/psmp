@@ -24,6 +24,7 @@ func CreateShort(param string, bizType string) string {
 
 	md5Code := shortUtil.Get16MD5Encode(param)
 	shortParam := shortUtil.GetShortParam(param)
+
 	redisCacheKey := cacheKey + shortParam
 
 	// 缓存中查
