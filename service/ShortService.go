@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
+
 	"github.com/spf13/viper"
 	"short-url/enum"
 	"short-url/mapper"
@@ -11,8 +11,6 @@ import (
 	shortUtil "short-url/utils/short"
 	"strings"
 )
-
-type Response gin.H
 
 const (
 	path     = "st"
