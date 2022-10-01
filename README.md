@@ -9,7 +9,7 @@
 
 ## 使用示例
 
-### 1. config 配置文件
+### 1. application.yml 配置文件
 ~~~yml
 server:
   port: 8080
