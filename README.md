@@ -1,6 +1,6 @@
 # go-psmp(golang public-seat-manager-platform)
 
-一款go 语言写的轻量级后台健康管理平台, 集成了 redis mysql cron email等基础封装
+一款go 语言写的轻量级后台管理平台, 集成了 redis mysql cron email等基础封装
 ## 功能
 
 ### 1. 短链服务
