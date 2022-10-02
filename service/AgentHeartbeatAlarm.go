@@ -42,6 +42,7 @@ func AgentHeartbeatAlarm() {
 				var t = time.Now().Format("2006-01-02 15:04:05") + ""
 				content = fmt.Sprintf(content, t)
 				// 发送邮件
+
 				saveEmailRecord("告警平台", "guozhifengvip@163.com", "【Agent恢复】", content, "HTML")
 
 			}

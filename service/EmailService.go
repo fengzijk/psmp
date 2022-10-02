@@ -2,35 +2,34 @@ package service
 
 import (
 	"bytes"
+	"crypto/tls"
 	"fmt"
+	"github.com/go-gomail/gomail"
 	"go-psmp/config"
 	"go-psmp/mapper"
 	"go-psmp/pojo/entity"
 	"go-psmp/pojo/request"
 	"go-psmp/utils/short"
 	"log"
-	"net/smtp"
 	"strings"
 )
 
-func SendToMail(sendUserName, to, subject, body, mailType string) error {
-	user := config.EmailConf.User
-	password := config.EmailConf.Password
-	host := config.EmailConf.Host
+func SendToMail(subject, body string) error {
 
-	hp := strings.Split(host, ":")
-	//fmt.Println(hp)
-	auth := smtp.PlainAuth("", user, password, hp[0])
-	var contentType string
-	if mailType == "HTML" {
-		contentType = "Content-Type: text/" + mailType + "; charset=UTF-8"
-	} else {
-		contentType = "Content-Type: text/plain" + "; charset=UTF-8"
+	// 主题
+	config.Message.SetHeader("Subject", subject)
+
+	// 正文
+	config.Message.SetBody("text/html", body)
+
+	d := gomail.NewDialer(config.EmailConf.Host, config.EmailConf.Port, config.EmailConf.User, config.EmailConf.Password)
+	// 发送
+	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
+	err := d.DialAndSend(config.Message)
+	if err != nil {
+		log.Print(err)
 	}
 
-	msg := []byte("To: " + to + "\r\nFrom: " + sendUserName + "<" + user + ">" + "\r\nSubject: " + subject + "\r\n" + contentType + "\r\n\r\n" + body)
-	sendTo := strings.Split(to, ";")
-	err := smtp.SendMail(host, auth, user, sendTo, msg)
 	return err
 }
 
@@ -58,7 +57,7 @@ func SaveMail(email request.SendEmailRequest) bool {
 		<html lang="en">
 		<head>
 			<meta charset="iso-8859-15">
-			<title>yyyyyy/title>
+			<title>gaojing/title>
 		</head>
 		<body>
 			` + fmt.Sprintf(email.Content) +

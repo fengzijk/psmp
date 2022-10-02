@@ -31,7 +31,7 @@ func InitTask() {
 	_, _ = c.AddFunc(spec, func() {
 
 		sendEmailTask()
-		log.Println("[Cron] Run sendEmailTask...")
+		//log.Println("[Cron] Run sendEmailTask...")
 
 	})
 
@@ -39,7 +39,7 @@ func InitTask() {
 	AgentHeartbeatSpec := viper.GetString("task-cron.agent-heartbeat-alarm")
 	_, _ = c.AddFunc(AgentHeartbeatSpec, func() {
 		service.AgentHeartbeatAlarm()
-		log.Println("[Cron] Run AgentHeartbeatAlarmTask...")
+		//	log.Println("[Cron] Run AgentHeartbeatAlarmTask...")
 
 	})
 
@@ -49,7 +49,7 @@ func InitTask() {
 func sendEmailTask() {
 
 	var lockKey = sendEmailLockKey + "sendEmailTask"
-	lock := redis.Lock(lockKey, 100)
+	lock := redis.Lock(lockKey, 4)
 	if !lock {
 		log.Println("发送邮件获取锁失败")
 		return
@@ -77,7 +77,7 @@ func sendEmailTask() {
 	var failList []entity.EmailRecordEntity
 	// 发送邮件
 	for i := 0; i < len(unSendList); i++ {
-		err := service.SendToMail(unSendList[i].EmailFrom, unSendList[i].EmailTo, unSendList[i].Subject, unSendList[i].Content, unSendList[i].TemplateFlag)
+		err := service.SendToMail(unSendList[i].Subject, unSendList[i].Content)
 		if err == nil {
 			successIds = append(successIds, unSendList[i].ID)
 			continue
