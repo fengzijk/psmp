@@ -2,9 +2,11 @@ package task
 
 import (
 	"github.com/robfig/cron/v3"
+	"github.com/spf13/viper"
 	"go-psmp/mapper"
 	"go-psmp/pojo/entity"
 	"go-psmp/service"
+	"go-psmp/utils/redis"
 	"log"
 )
 
@@ -14,13 +16,17 @@ func newWithSeconds() *cron.Cron {
 	return cron.New(cron.WithParser(secondParser), cron.WithChain())
 }
 
+const (
+	sendEmailLockKey = "short:send_email_task:lock:"
+)
+
 func InitTask() {
 
 	log.Println("[Cron] Starting...")
 
 	c := newWithSeconds()
 
-	spec := "*/15 * * * * *" //每5秒执行一次
+	spec := viper.GetString("task-cron.send-alarm-email")
 
 	_, _ = c.AddFunc(spec, func() {
 
@@ -33,6 +39,16 @@ func InitTask() {
 }
 
 func sendEmailTask() {
+
+	var lockKey = sendEmailLockKey + "sendEmailTask"
+	lock := redis.Lock(lockKey, 100)
+	if !lock {
+		log.Println("发送邮件获取锁失败")
+		return
+	}
+
+	// 解锁
+	defer redis.UnLock(lockKey)
 
 	// 查询邮件
 	unSendList, err := mapper.FindUnSendList()
@@ -65,6 +81,10 @@ func sendEmailTask() {
 				SendStatus:    "FAIL",
 			}
 
+			if failEntity.SendFailCount > 5 {
+				failEntity.SendStatus = "SUCCESS"
+				failEntity.ErrorMsg = "Exceeded times"
+			}
 			failList = append(failList, failEntity)
 		}
 	}

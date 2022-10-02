@@ -53,7 +53,7 @@ func CreateShort(param string, bizType string) string {
 
 	// 存在返回结果
 	if urlEntity.ShortParam != "" {
-		redis.SetObj(redisCacheKey, urlEntity)
+		redis.SetObj(redisCacheKey, urlEntity, 0)
 
 		if urlEntity.BizType == enum.BizTypeEnum.GetMsg(2) {
 			result = fmt.Sprintf("%s/%s/%s", viper.GetString("short.prefix"), path, urlEntity.ShortParam)
@@ -103,7 +103,7 @@ func FindShortByByShortParam(shortParam string) entity.ShortURLEntity {
 	}
 
 	if urlEntity.ID != 0 {
-		redis.SetObj(redisCacheKey, urlEntity)
+		redis.SetObj(redisCacheKey, urlEntity, 0)
 	}
 
 	return urlEntity

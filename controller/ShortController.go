@@ -21,10 +21,10 @@ func CreateShort(c *gin.Context) {
 
 	shortUrl := service.CreateShort(content.Content, enum.BizTypeEnum.GetMsg(enum.BizTypeEnum(content.BizType)))
 
-	to := []string{"guozhifengvip@163.com"}
-	var dto = request.SendEmailRequest{EmailTo: to, Subject: "aaaaa", Content: "http://baidu.com", SystemName: "monitor"}
+	//to := []string{"guozhifengvip@163.com"}
+	//var dto = request.SendEmailRequest{EmailTo: to, Subject: "aaaaa", Content: "http://baidu.com", SystemName: "monitor"}
 	//service.SaveMail("gzf", "guozhifengvip@163.com", "alarm", "http://baidu.com", "html")
-	service.SaveMail(dto)
+	//service.SaveMail(dto)
 	resp := response.Result{
 		Code: 200,
 		Msg:  "OK",
@@ -43,8 +43,6 @@ func Redirect(c *gin.Context) {
 	if shortEntry.LongParam != "" {
 
 		if shortEntry.BizType == enum.BizTypeEnum.GetMsg(2) {
-			//c.Request.URL = shortEntry.LongParam
-			//c.h
 			c.Redirect(http.StatusMovedPermanently, shortEntry.LongParam)
 
 		} else {
