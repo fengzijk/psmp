@@ -14,8 +14,9 @@ func InitRouter() *gin.Engine {
 	ShortRouter(router)
 	// 登录路由
 	UserLoginRouter(router)
-	// 缓存路由
-	//RedisRouter(router)
+	// Email路由
+	EmailRouter(router)
+	// 首页路由
 	HomePageRouter(router)
 	return router
 }

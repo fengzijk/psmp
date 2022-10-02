@@ -68,11 +68,23 @@ func UpdateEmailSendFail(failList []entity.EmailRecordEntity) {
 	}
 
 	for _, s := range failList {
-		deRes := db.Model(&entity.EmailRecordEntity{}).Updates(s)
+		deRes := db.Model(&entity.EmailRecordEntity{}).Where("id=?", s.ID).Updates(s)
 		err := deRes.Error
 		if err != nil {
 			fmt.Printf("param failed, err:%v\n", err)
 
 		}
 	}
+}
+
+func FindEmailByMd5Code(md5code string) entity.EmailRecordEntity {
+	var emailEntity entity.EmailRecordEntity
+	dbRes := db.Model(&entity.EmailRecordEntity{}).Where("md5_code=? ", md5code).First(&emailEntity)
+
+	err := dbRes.Error
+	if err != nil {
+		return emailEntity
+	}
+	fmt.Println(emailEntity)
+	return emailEntity
 }

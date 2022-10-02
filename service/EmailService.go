@@ -36,11 +36,11 @@ func SendToMail(sendUserName, to, subject, body, mailType string) error {
 
 func SaveMail(email request.SendEmailRequest) bool {
 
-	source := email.SystemName
-	if source != "monitor" {
-		fmt.Println("Send mail error!,source 认证失败")
-		return false
-	}
+	//source := email.SystemName
+	//if source != "psmp-agent" {
+	//	fmt.Println("Send mail error!,source 认证失败")
+	//	return false
+	//}
 
 	to := email.EmailTo
 	if to[0] == "" {
@@ -91,6 +91,12 @@ func saveEmailRecord(sendUserName, emailTo, subject, content, templateFlag strin
 		SendFailCount: 0,
 		TemplateFlag:  templateFlag,
 	}
+
+	recordEntity := mapper.FindEmailByMd5Code(insert.Md5Code)
+	if recordEntity.ID != 0 {
+		return
+	}
+
 	_ = mapper.InsertEmailRecord(insert)
 }
 
