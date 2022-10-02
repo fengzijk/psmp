@@ -17,7 +17,7 @@ func newWithSeconds() *cron.Cron {
 }
 
 const (
-	sendEmailLockKey = "short:send_email_task:lock:"
+	sendEmailLockKey = "lock:send_email_task:"
 )
 
 func InitTask() {
@@ -26,12 +26,20 @@ func InitTask() {
 
 	c := newWithSeconds()
 
+	//
 	spec := viper.GetString("task-cron.send-alarm-email")
-
 	_, _ = c.AddFunc(spec, func() {
 
 		sendEmailTask()
 		log.Println("[Cron] Run sendEmailTask...")
+
+	})
+
+	// Agent 告警定时任务
+	AgentHeartbeatSpec := viper.GetString("task-cron.agent-heartbeat-alarm")
+	_, _ = c.AddFunc(AgentHeartbeatSpec, func() {
+		service.AgentHeartbeatAlarm()
+		log.Println("[Cron] Run AgentHeartbeatAlarmTask...")
 
 	})
 

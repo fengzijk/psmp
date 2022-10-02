@@ -18,5 +18,8 @@ func InitRouter() *gin.Engine {
 	EmailRouter(router)
 	// 首页路由
 	HomePageRouter(router)
+
+	// Agent路由
+	AgentRouter(router)
 	return router
 }

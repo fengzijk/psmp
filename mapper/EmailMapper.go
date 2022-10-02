@@ -85,6 +85,5 @@ func FindEmailByMd5Code(md5code string) entity.EmailRecordEntity {
 	if err != nil {
 		return emailEntity
 	}
-	fmt.Println(emailEntity)
 	return emailEntity
 }

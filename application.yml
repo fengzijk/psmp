@@ -15,3 +15,12 @@ short:
   prefix: http://localhost:8080
   length: 8
 
+email:
+  user:
+  password:
+  host :
+
+task-cron:
+  #每5秒执行一次
+  send-alarm-email: "*/5 * * * * *"
+  agent-heartbeat-alarm: "*/5 * * * * *"
