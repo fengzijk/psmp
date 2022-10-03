@@ -31,3 +31,11 @@ task-cron:
   #每5秒执行一次
   send-alarm-email: "*/5 * * * * *"
   agent-heartbeat-alarm: "*/5 * * * * *"
+
+
+# 告警通知给谁的邮件多个用;分割
+alarm-email:
+  cpu: g12@163.com
+  agent: g12@163.com
+  disk:  g12@163.com
+  app: g12@163.com

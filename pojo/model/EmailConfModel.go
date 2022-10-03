@@ -5,4 +5,6 @@ type EmailConfModel struct {
 	Password string `json:"password"`
 	Host     string `json:"host"`
 	Port     int    `json:"port"`
+	ToUser   string `json:"toUser"`
+	CcUser   string `json:"ccUser"`
 }

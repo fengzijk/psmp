@@ -12,7 +12,7 @@ func InsertEmailRecord(param entity.EmailRecordEntity) error {
 		EmailFrom:     param.EmailFrom,
 		EmailTo:       param.EmailTo,
 		Subject:       param.Subject,
-		Content:       param.Content,
+		Body:          param.Body,
 		SendStatus:    param.SendStatus,
 		ErrorMsg:      param.ErrorMsg,
 		SendFailCount: param.SendFailCount,

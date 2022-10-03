@@ -8,7 +8,7 @@ import (
 func EmailRouter(router *gin.Engine) {
 	routerGroup := router.Group("/email")
 	{
-		routerGroup.POST("/save", controller.SendEmail)
+		routerGroup.POST("/:bizType/save", controller.SendEmail)
 	}
 
 }

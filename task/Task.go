@@ -77,7 +77,8 @@ func sendEmailTask() {
 	var failList []entity.EmailRecordEntity
 	// 发送邮件
 	for i := 0; i < len(unSendList); i++ {
-		err := service.SendToMail(unSendList[i].Subject, unSendList[i].Content)
+		err := service.SendToMail(unSendList[i])
+
 		if err == nil {
 			successIds = append(successIds, unSendList[i].ID)
 			continue

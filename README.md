@@ -9,7 +9,7 @@
 ### 3. 钉钉告警(开发中...)
 ### 4.[Agent项目](https://github.com/fengzijk/psmp-agent/tree/master)
     1. cpu监控 (1.0.0 已经完成)
-    2. 磁盘监控(1.0.1)
+    2. 磁盘监控(1.0.1 计划中)
     3. web服务监控(1.0.0 已经完成)
 
 
