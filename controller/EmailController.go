@@ -20,6 +20,11 @@ func SendEmail(c *gin.Context) {
 	bizType := c.Param("bizType")
 	emailRequest := request.SendEmailRequest{}
 
+	err := c.BindJSON(&emailRequest)
+	if err != nil {
+		c.JSON(http.StatusAlreadyReported, *response.Fail("失败"))
+	}
+
 	if CPU == bizType {
 
 		emailRequest.FromName = "CPU告警 "
@@ -39,11 +44,6 @@ func SendEmail(c *gin.Context) {
 	//if CPU==bizType {
 	//	emailRequest.ToUser= viper.GetString("alarm-email.cpu")
 	//}
-
-	err := c.BindJSON(&emailRequest)
-	if err != nil {
-		c.JSON(http.StatusAlreadyReported, *response.Fail("失败"))
-	}
 
 	service.SaveMail(emailRequest)
 	resp := response.Result{

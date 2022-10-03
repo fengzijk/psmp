@@ -6,7 +6,7 @@ type EmailRecordEntity struct {
 	// 主键id
 	ID            int64  `gorm:"primarykey;autoIncrement:false;comment:主键ID"`
 	Md5Code       string `gorm:"type:varchar(20); NOT NULL ; default:''; uniqueIndex: idx_md5,sort:desc; comment:MD5值 唯一"`
-	EmailFrom     string `gorm:"type:varchar(64); NOT NULL; default :''; comment:发件人"`
+	FromName      string `gorm:"type:varchar(64); NOT NULL; default :''; comment:发件人"`
 	EmailTo       string `gorm:"type:varchar(512) ; NOT NULL; default :''; comment:收件人，多个收件人用英文;分隔"`
 	EmailCc       string `gorm:"type:varchar(512) ; NOT NULL; default :''; comment:收件人，多个收件人用英文;分隔"`
 	Subject       string `gorm:"type:varchar(200) ; NOT NULL; default :''; comment:标题"`

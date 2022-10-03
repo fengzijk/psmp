@@ -9,7 +9,7 @@ import (
 func InsertEmailRecord(param entity.EmailRecordEntity) error {
 	deres := db.Create(&entity.EmailRecordEntity{ID: utils.NextId(),
 		Md5Code:       param.Md5Code,
-		EmailFrom:     param.EmailFrom,
+		FromName:      param.FromName,
 		EmailTo:       param.EmailTo,
 		Subject:       param.Subject,
 		Body:          param.Body,

@@ -20,7 +20,7 @@ func SendToMail(recordEntity entity.EmailRecordEntity) error {
 
 	// 发件人
 	// 第三个参数为发件人别名，如"李大锤"，可以为空（此时则为邮箱名称）
-	config.Message.SetAddressHeader("From", config.EmailConf.User, "")
+	config.Message.SetAddressHeader("From", config.EmailConf.User, recordEntity.FromName)
 
 	if len(recordEntity.EmailTo) == 0 {
 		return fmt.Errorf("收件人不能为空")
@@ -94,7 +94,7 @@ func saveEmailRecord(sendUserName, emailTo, emailCc, subject, body, templateFlag
 	// 构造发送邮件记录
 	insert := entity.EmailRecordEntity{
 		Md5Code:       short.Get16MD5Encode(sendUserName + emailTo + emailCc + subject + body + templateFlag),
-		EmailFrom:     sendUserName,
+		FromName:      sendUserName,
 		EmailTo:       emailTo,
 		Subject:       subject,
 		Body:          body,
