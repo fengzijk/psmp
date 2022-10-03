@@ -71,7 +71,7 @@ func Heartbeat(agentIp, agentName string) {
 		return
 	}
 
-	redis.SetEx(getAgentStr(agentIp, agentName), 190, 1)
+	redis.SetEx(AgentHeartbeat+getAgentStr(agentIp, agentName), 1, 185)
 	redis.HSet(Agent, getAgentStr(agentIp, agentName), 0)
 }
 
@@ -80,5 +80,5 @@ func getAgentStr(agentIp, agentName string) string {
 		return ""
 	}
 
-	return AgentHeartbeat + agentIp + "|" + agentName
+	return agentIp + "|" + agentName
 }

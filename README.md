@@ -1,3 +1,4 @@
+
 # go-psmp(golang public-seat-manager-platform)
 
 一款go 语言写的轻量级后台管理监控平台, 集成了 redis mysql cron email等基础封装
@@ -6,11 +7,17 @@
 ### 1. 短链服务
 ### 2. 邮件告警服务
 ### 3. 钉钉告警(开发中...)
+### 4.[Agent项目](https://github.com/fengzijk/psmp-agent/tree/master)
+    1. cpu监控 (1.0.0 已经完成)
+    2. 磁盘监控(1.0.1)
+    3. web服务监控(1.0.0 已经完成)
+
+
 
 ## 使用示例
 
 ### 1. application.yml 配置文件
-~~~yml
+```yml
 server:
   port: 8080
 mysql:
@@ -29,17 +36,30 @@ short:
   prefix: http://localhost:8080
   length: 8
 
-
 email:
-  user: xxx@163.com
-  password: 1111
-  host : smtp.163.com:25
-~~~
+  user: 
+  password: 
+  host : smtp.163.com
+  port: 465
+  toUser:
+ 
+# 定时任务
+task-cron:
+  # 邮件告警 每5秒执行一次
+  send-alarm-email: "*/5 * * * * *"
+  # agent 心跳检查 五秒一次
+  agent-heartbeat-alarm: "*/5 * * * * *"
+```
 
-~~~
+
+
+## 打包命令
+
+```shell
 set CGO_ENABLED=0
 set GOOS=linux
 set GOARCH=amd64
 
-go build -o short main.go
-~~~
+go build -o go-psmp main.go
+
+```
