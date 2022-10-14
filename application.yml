@@ -19,12 +19,9 @@ short:
 email:
   user:
   password:
-  host : smtp.163.com
+  host: smtp.qiye.163.com
   port: 465
-  toUser:
 
-
-#
 
 
 task-cron: #每5秒执行一次
@@ -34,7 +31,20 @@ task-cron: #每5秒执行一次
 
 # 告警通知给谁的邮件多个用;分割
 alarm-email:
-  cpu: g12@163.com
-  agent: g12@163.com
-  disk:  g12@163.com
-  app: g12@163.com
+  cpu: guozhifengvip@163.com
+  agent: guozhifengvip@163.com
+  disk: guozhifengvip@163.com
+  app: guozhifengvip@163.com
+
+# 企业微信推送
+alarm-weixin:
+  # 用户账户
+  toUser:
+  # 部门Id
+  toPartyId: fengzijk
+  #
+  agentId:
+  #企业号的标识
+  corpId:
+  #企业号中的应用的Secret
+  corpSecret:
