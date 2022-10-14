@@ -18,38 +18,73 @@ const (
 func SendEmail(c *gin.Context) {
 
 	bizType := c.Param("bizType")
-	emailRequest := request.SendEmailRequest{}
+	dto := request.AlarmRequest{}
 
-	err := c.BindJSON(&emailRequest)
+	err := c.BindJSON(&dto)
 	if err != nil {
 		c.JSON(http.StatusAlreadyReported, *response.Fail("失败"))
 	}
 
-	if CPU == bizType {
+	notifyEmail(bizType, dto.Body)
 
-		emailRequest.FromName = "CPU告警 "
-		emailRequest.ToUser = viper.GetString("alarm-email.cpu")
-	}
+	notifyWxPush(bizType, dto.Body)
 
-	if DISK == bizType {
-		emailRequest.FromName = "磁盘告警 "
-		emailRequest.ToUser = viper.GetString("alarm-email.disk")
-	}
-
-	if APP == bizType {
-		emailRequest.FromName = "AppService告警 "
-		emailRequest.ToUser = viper.GetString("alarm-email.app")
-	}
-
-	//if CPU==bizType {
-	//	emailRequest.ToUser= viper.GetString("alarm-email.cpu")
-	//}
-
-	service.SaveMail(emailRequest)
 	resp := response.Result{
 		Code: 200,
 		Msg:  "OK",
 		Data: "SUCCESS",
 	}
 	c.JSON(http.StatusOK, &resp)
+
+}
+
+func notifyEmail(bizType, body string) {
+
+	var fromName, toUser string
+
+	if CPU == bizType {
+		fromName = "CPU告警 "
+		toUser = viper.GetString("alarm-email.cpu")
+	}
+
+	if DISK == bizType {
+		fromName = "磁盘告警 "
+		toUser = viper.GetString("alarm-email.disk")
+	}
+
+	if APP == bizType {
+		fromName = "AppService告警 "
+		toUser = viper.GetString("alarm-email.app")
+	}
+
+	emailRequest := request.SendEmailRequest{
+		FromName: fromName,
+		ToUser:   toUser,
+		Body:     body,
+		CcUser:   toUser,
+	}
+
+	service.SaveMail(emailRequest)
+}
+
+func notifyWxPush(bizType, body string) {
+
+	partId := viper.GetString("alarm-weixin.toPartyId")
+	toUser := viper.GetString("alarm-weixin.toUser")
+	agentId := viper.GetInt("alarm-weixin.agentId")
+	var fromName string
+
+	if CPU == bizType {
+		fromName = "CPU告警 "
+	}
+
+	if DISK == bizType {
+		fromName = "磁盘告警 "
+	}
+
+	if APP == bizType {
+		fromName = "AppService告警 "
+	}
+
+	service.SaveWxPushMessage(toUser, partId, fromName+body, agentId)
 }
