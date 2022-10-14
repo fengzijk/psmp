@@ -7,12 +7,12 @@
 ### 1. 短链服务
 ### 2. 邮件告警服务
 ### 3. 钉钉告警(开发中...)
-### 4. 企业微信推送 
+### 4. 企业微信推送告警 
 ### 5.[Agent项目](https://github.com/fengzijk/psmp-agent/tree/master)
-    1. cpu监控 (1.0.0 已经完成)
-    2. 磁盘监控(1.0.1 计划中)
-    3. web服务监控(1.0.0 已经完成)
-    4. 企业微信推送 (1.0.2 已经完成)
+    1. cpu监控 (0.0.0 已经完成)
+    2. 磁盘监控(计划中)
+    3. web服务监控(0.0.1 已经完成)
+    4. 企业微信推送 (0.0.2 已经完成)
 
 
 
@@ -51,6 +51,19 @@ task-cron:
   send-alarm-email: "*/5 * * * * *"
   # agent 心跳检查 五秒一次
   agent-heartbeat-alarm: "*/5 * * * * *"
+
+# 企业微信推送
+alarm-weixin:
+  # 用户账户
+  toUser:
+  # 部门Id
+  toPartyId: fengzijk
+  #应用Id
+  agentId:
+  #企业号的标识
+  corpId:
+  #企业号中的应用的Secret
+  corpSecret:
 ```
 
 
