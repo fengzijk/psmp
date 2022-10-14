@@ -58,7 +58,7 @@ func getAccessToken(corpId, corpSecret string) string {
 	return accessToken.Token
 }
 
-func sendMessage(accessToken, msg string) {
+func sendMessage(accessToken, msg string) string {
 	sendUrl := "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + accessToken
 	postJson := util.PostJson(sendUrl, msg, "")
 	var res Result
@@ -66,17 +66,20 @@ func sendMessage(accessToken, msg string) {
 	if err != nil {
 		log.Print(err)
 	}
-
+	return res.Errmsg
 }
 
-func SendWxPushMessage(corpId, corpSecret, toUser, toParty, messageContent string, agentId int) bool {
+func SendWxPushMessage(corpId, corpSecret, toUser, toParty, messageContent string, agentId int) string {
 	token := getAccessToken(corpId, corpSecret)
-
+	var res string
 	if token != "" {
 		messageBody := getMessageBody(toUser, toParty, agentId, messageContent)
-		sendMessage(token, messageBody)
+		res = sendMessage(token, messageBody)
+
+	} else {
+		return "get token fail"
 	}
-	return true
+	return res
 }
 
 func SaveWxPushMessage(toUser, toParty, messageContent string, agentId int) bool {
@@ -86,7 +89,7 @@ func SaveWxPushMessage(toUser, toParty, messageContent string, agentId int) bool
 
 		ToUser:        toUser,
 		ToPartyId:     toParty,
-		AgentId:       Agent,
+		AgentId:       agentId,
 		Body:          messageContent,
 		SendStatus:    "WAIT",
 		SendFailCount: 0,
@@ -97,4 +100,12 @@ func SaveWxPushMessage(toUser, toParty, messageContent string, agentId int) bool
 		return false
 	}
 	return true
+}
+
+func UpdateWxPushSendSuccess(ids []int64) {
+	mapper.UpdateWxPushSendSuccess(ids)
+}
+
+func UpdateWxPushSendFail(failList []entity.WxPushRecordEntity) {
+	mapper.UpdateWxPushSendFail(failList)
 }

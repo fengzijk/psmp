@@ -17,7 +17,8 @@ func newWithSeconds() *cron.Cron {
 }
 
 const (
-	sendEmailLockKey = "lock:send_email_task:"
+	sendEmailLockKey  = "lock:send_email_task:"
+	sendWxPushLockKey = "lock:send_wx_task:"
 )
 
 func InitTask() {
@@ -43,6 +44,13 @@ func InitTask() {
 
 	})
 
+	// Agent 告警定时任务
+	WxPushSpec := viper.GetString("task-cron.send-alarm-wx")
+	_, _ = c.AddFunc(WxPushSpec, func() {
+		SendWxPushTask()
+		log.Println("[Cron] Run SendWxPushTask...")
+
+	})
 	c.Start()
 }
 
@@ -103,4 +111,64 @@ func sendEmailTask() {
 
 	// 更新失败
 	service.UpdateEmailSendFail(failList)
+}
+
+func SendWxPushTask() {
+
+	var lockKey = sendWxPushLockKey + "sendWxPushTask"
+	lock := redis.Lock(lockKey, 4)
+	if !lock {
+		log.Println("发送微信推送获取锁失败")
+		return
+	}
+
+	// 解锁
+	defer redis.UnLock(lockKey)
+
+	corpId := viper.GetString("alarm-weixin.corpId")
+	corpSecret := viper.GetString("alarm-weixin.corpSecret")
+	// 查询
+	unSendList, err := mapper.FindWxPushUnSendList()
+	if err != nil {
+		return
+	}
+
+	if len(unSendList) == 0 {
+		return
+	}
+
+	if unSendList[0].ID == 0 {
+		return
+	}
+
+	var successIds []int64
+
+	var failList []entity.WxPushRecordEntity
+	// 发送邮件
+	for i := 0; i < len(unSendList); i++ {
+		err := service.SendWxPushMessage(corpId, corpSecret, unSendList[i].ToUser, unSendList[i].ToPartyId, unSendList[i].Body, unSendList[i].AgentId)
+		if err == "" {
+			successIds = append(successIds, unSendList[i].ID)
+			continue
+		} else {
+			failEntity := entity.WxPushRecordEntity{
+				ID:            unSendList[i].ID,
+				SendFailCount: unSendList[i].SendFailCount + 1,
+				ErrorMsg:      err,
+				SendStatus:    "FAIL",
+			}
+
+			if failEntity.SendFailCount > 5 {
+				failEntity.SendStatus = "SUCCESS"
+				failEntity.ErrorMsg = "Exceeded times"
+			}
+			failList = append(failList, failEntity)
+		}
+	}
+
+	// 更新邮件
+	service.UpdateWxPushSendSuccess(successIds)
+
+	// 更新失败
+	service.UpdateWxPushSendFail(failList)
 }

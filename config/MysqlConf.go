@@ -4,6 +4,7 @@ import (
 	_ "database/sql"
 	"fmt"
 	"github.com/spf13/viper"
+	"go-psmp/pojo/entity"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"time"
@@ -29,7 +30,7 @@ func InitDb() (db *gorm.DB, err error) {
 
 	// SetConnMaxLifetime 设置了连接可复用的最大时间。
 	sqlDB.SetConnMaxLifetime(10 * time.Second)
-	//err = db.AutoMigrate(&entity.EmailRecordEntity{})
+	err = db.AutoMigrate(&entity.WxPushRecordEntity{})
 	if err != nil {
 		return nil, err
 	}
