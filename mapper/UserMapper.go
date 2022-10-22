@@ -5,9 +5,9 @@ import (
 	"go-psmp/pojo/entity"
 )
 
-func FindUserByUsername(username string) entity.User {
-	var res entity.User
-	find := db.Model(&entity.User{}).Where("username = ?", username).Find(&res)
+func FindUserByUsername(username string) entity.UserInfoEntity {
+	var res entity.UserInfoEntity
+	find := db.Model(&entity.UserInfoEntity{}).Where("username = ?", username).Find(&res)
 
 	err := find.Error
 	if err != nil {

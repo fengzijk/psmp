@@ -6,8 +6,14 @@ import (
 )
 
 func UserLoginRouter(router *gin.Engine) {
-	login := router.Group("/login")
+	PrivateGroup := router.Group("/manager")
+
+	//PrivateGroup.Use(handle.JWTAuth())
 	{
-		login.POST("", controller.Login)
+		PrivateGroup.POST("/login", controller.Login)
+	}
+
+	{
+		PrivateGroup.GET("/email-records/list-page", controller.ListPageEmailByAdmin)
 	}
 }

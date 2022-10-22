@@ -26,7 +26,10 @@ type AccessToken struct {
 	Time      int64  `json:"time"`
 }
 
-func getMessageBody(toUser string, toParty string, agentId int, content string) string {
+type WxPushService struct {
+}
+
+func (wxPushService *WxPushService) getMessageBody(toUser string, toParty string, agentId int, content string) string {
 	msg := dto.WxPushMessage{
 		ToUser:  toUser,
 		ToParty: toParty,
@@ -43,7 +46,7 @@ func getMessageBody(toUser string, toParty string, agentId int, content string) 
 	return string(sendMsg)
 }
 
-func getAccessToken(corpId, corpSecret string) string {
+func (wxPushService *WxPushService) getAccessToken(corpId, corpSecret string) string {
 
 	getTokenUrl := "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=" + corpId + "&corpsecret=" + corpSecret
 
@@ -58,7 +61,7 @@ func getAccessToken(corpId, corpSecret string) string {
 	return accessToken.Token
 }
 
-func sendMessage(accessToken, msg string) string {
+func (wxPushService *WxPushService) sendMessage(accessToken, msg string) string {
 	sendUrl := "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + accessToken
 	postJson := util.PostJson(sendUrl, msg, "")
 	var res Result
@@ -69,12 +72,12 @@ func sendMessage(accessToken, msg string) string {
 	return res.Errmsg
 }
 
-func SendWxPushMessage(corpId, corpSecret, toUser, toParty, messageContent string, agentId int) string {
-	token := getAccessToken(corpId, corpSecret)
+func (wxPushService *WxPushService) SendWxPushMessage(corpId, corpSecret, toUser, toParty, messageContent string, agentId int) string {
+	token := wxPushService.getAccessToken(corpId, corpSecret)
 	var res string
 	if token != "" {
-		messageBody := getMessageBody(toUser, toParty, agentId, messageContent)
-		res = sendMessage(token, messageBody)
+		messageBody := wxPushService.getMessageBody(toUser, toParty, agentId, messageContent)
+		res = wxPushService.sendMessage(token, messageBody)
 
 	} else {
 		return "get token fail"
@@ -82,7 +85,7 @@ func SendWxPushMessage(corpId, corpSecret, toUser, toParty, messageContent strin
 	return res
 }
 
-func SaveWxPushMessage(toUser, toParty, messageContent string, agentId int) bool {
+func (wxPushService *WxPushService) SaveWxPushMessage(toUser, toParty, messageContent string, agentId int) bool {
 
 	insert := entity.WxPushRecordEntity{
 		Md5Code: short.Get16MD5Encode(toUser + toParty + messageContent + string(rune(agentId))),
@@ -102,10 +105,10 @@ func SaveWxPushMessage(toUser, toParty, messageContent string, agentId int) bool
 	return true
 }
 
-func UpdateWxPushSendSuccess(ids []int64) {
+func (wxPushService *WxPushService) UpdateWxPushSendSuccess(ids []int64) {
 	mapper.UpdateWxPushSendSuccess(ids)
 }
 
-func UpdateWxPushSendFail(failList []entity.WxPushRecordEntity) {
+func (wxPushService *WxPushService) UpdateWxPushSendFail(failList []entity.WxPushRecordEntity) {
 	mapper.UpdateWxPushSendFail(failList)
 }

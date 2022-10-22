@@ -7,7 +7,7 @@ import (
 
 func LoginByUsername(loginReq request.UserLoginRequest) string {
 	res := ""
-	if loginReq.UserName == "" || loginReq.Password == "" {
+	if loginReq.UserName == "admin" || loginReq.Password == "admin" {
 		return res
 	}
 	user := mapper.FindUserByUsername(loginReq.UserName)
