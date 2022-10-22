@@ -13,6 +13,8 @@ const (
 	frequency              = 600
 )
 
+var emailService = ServiceGroup.EmailService
+
 func AgentHeartbeatAlarm() {
 
 	agentMap := redis.HGetAll(Agent)
@@ -43,7 +45,7 @@ func AgentHeartbeatAlarm() {
 				content = fmt.Sprintf(content, t)
 				// 发送邮件
 
-				saveEmailRecord("告警平台", "guozhifengvip@163.com", "", "【Agent恢复】", content, "HTML")
+				emailService.saveEmailRecord("告警平台", "guozhifengvip@163.com", "", "【Agent恢复】", content, "HTML")
 
 			}
 
@@ -60,7 +62,7 @@ func AgentHeartbeatAlarm() {
 			// 发送邮件
 			content := " 时间:%s\n  检测到:" + agent + ":监控agent服务不可用，请尽快处理"
 			content = fmt.Sprintf(content, t)
-			saveEmailRecord("告警平台", "guozhifengvip@163.com", "", "【Agent异常】", content, "HTML")
+			emailService.saveEmailRecord("告警平台", "guozhifengvip@163.com", "", "【Agent异常】", content, "HTML")
 
 		}
 	}

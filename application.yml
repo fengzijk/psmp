@@ -48,3 +48,21 @@ alarm-weixin:
   corpId:
   #企业号中的应用的Secret
   corpSecret:
+
+
+jwt:
+  signing-key: qmPlus
+  expires-time: 7d
+  buffer-time: 1d
+  issuer: fengzijk
+
+
+zap:
+  level: info
+  format: console
+  prefix: ""
+  director: log
+  show-line: true
+  encode-level: LowercaseColorLevelEncoder
+  stacktrace-key: stacktrace
+  log-in-console: true

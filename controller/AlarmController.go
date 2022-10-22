@@ -15,6 +15,8 @@ const (
 	APP  = "app"
 )
 
+var wxPushService = service.ServiceGroup.WxPushService
+
 func SendEmail(c *gin.Context) {
 
 	bizType := c.Param("bizType")
@@ -29,7 +31,7 @@ func SendEmail(c *gin.Context) {
 
 	notifyWxPush(bizType, dto.Body)
 
-	resp := response.Result{
+	resp := response.ResponseResult{
 		Code: 200,
 		Msg:  "OK",
 		Data: "SUCCESS",
@@ -64,7 +66,7 @@ func notifyEmail(bizType, body string) {
 		CcUser:   toUser,
 	}
 
-	service.SaveMail(emailRequest)
+	emailService.SaveMail(emailRequest)
 }
 
 func notifyWxPush(bizType, body string) {
@@ -86,5 +88,5 @@ func notifyWxPush(bizType, body string) {
 		fromName = "AppService告警 "
 	}
 
-	service.SaveWxPushMessage(toUser, partId, fromName+body, agentId)
+	wxPushService.SaveWxPushMessage(toUser, partId, fromName+body, agentId)
 }

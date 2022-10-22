@@ -15,7 +15,7 @@ func AgentHeartbeat(c *gin.Context) {
 	//if strings.ContainsAny(agent,"-"){}
 
 	service.Heartbeat(agentIp, agentName)
-	resp := response.Result{
+	resp := response.ResponseResult{
 		Code: 200,
 		Msg:  "OK",
 		Data: "SUCCESS",
