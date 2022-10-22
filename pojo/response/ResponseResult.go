@@ -43,22 +43,23 @@ func SuccessMessage(data interface{}, code int, message string) *ResponseResult 
 	return msg
 }
 
-func Fail(msg string) *ResponseResult {
+func Fail(msg string, c *gin.Context) {
 	msgObj := &ResponseResult{
 		Code:      http.StatusInternalServerError,
 		Msg:       msg,
 		TimeStamp: time.Now().UnixMilli(),
 	}
-	return msgObj
+	c.JSON(http.StatusOK, msgObj)
 }
 
-func FailMessage(code int, msg string) *ResponseResult {
+func FailMessage(code int, msg string, c *gin.Context) {
 	msgObj := &ResponseResult{
 		Code:      code,
 		Msg:       msg,
 		TimeStamp: time.Now().UnixMilli(),
 	}
-	return msgObj
+
+	c.JSON(http.StatusOK, msgObj)
 }
 
 func FailMessageGin(code int, msg string, c *gin.Context) *ResponseResult {
