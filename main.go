@@ -30,6 +30,9 @@ func init() {
 
 	// 第四步 初始化邮件
 	config.InitEmail()
+
+	config.InitBaseConfig()
+	config.InitLogConf()
 }
 
 func ValidateJSONDateType(field reflect.Value) interface{} {

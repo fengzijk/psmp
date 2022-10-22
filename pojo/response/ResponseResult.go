@@ -13,10 +13,30 @@ type ResponseResult struct {
 	TimeStamp int64       `json:"timeStamp"`
 }
 
-func Success(data interface{}) *ResponseResult {
+func Ok(data interface{}, c *gin.Context) {
 	msg := &ResponseResult{
 		Code:      SuccessCode,
 		Msg:       Text(SuccessCode),
+		Data:      data,
+		TimeStamp: time.Now().UnixMilli(),
+	}
+	c.JSON(http.StatusOK, msg)
+}
+
+func Success(data interface{}, code int) *ResponseResult {
+	msg := &ResponseResult{
+		Code:      SuccessCode,
+		Msg:       Text(SuccessCode),
+		Data:      data,
+		TimeStamp: time.Now().UnixMilli(),
+	}
+	return msg
+}
+
+func SuccessMessage(data interface{}, code int, message string) *ResponseResult {
+	msg := &ResponseResult{
+		Code:      code,
+		Msg:       message,
 		Data:      data,
 		TimeStamp: time.Now().UnixMilli(),
 	}
