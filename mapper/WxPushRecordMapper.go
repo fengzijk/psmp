@@ -1,7 +1,7 @@
 package mapper
 
 import (
-	"fmt"
+	"go-psmp/config"
 	"go-psmp/pojo/entity"
 	"go-psmp/utils"
 )
@@ -20,7 +20,7 @@ func InsertWxPushRecord(param entity.WxPushRecordEntity) error {
 
 	err := deres.Error
 	if err != nil {
-		fmt.Printf("insert failed, err:%v\n", err)
+		config.Log.Info("insert failed, err:")
 		return err
 	}
 	return err
@@ -51,7 +51,7 @@ func UpdateWxPushSendSuccess(ids []int64) {
 	deRes := db.Model(&entity.WxPushRecordEntity{}).Where("id In ?", ids).Updates(entity.WxPushRecordEntity{SendStatus: "SUCCESS"})
 	err := deRes.Error
 	if err != nil {
-		fmt.Printf("param failed, err:%v\n", err)
+		config.Log.Info("param failed, err:%v\n")
 
 	}
 }
@@ -70,7 +70,7 @@ func UpdateWxPushSendFail(failList []entity.WxPushRecordEntity) {
 		deRes := db.Model(&entity.WxPushRecordEntity{}).Where("id=?", s.ID).Updates(s)
 		err := deRes.Error
 		if err != nil {
-			fmt.Printf("param failed, err:%v\n", err)
+			config.Log.Info("param failed, err:%v\n")
 
 		}
 	}

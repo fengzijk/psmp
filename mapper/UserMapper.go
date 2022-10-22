@@ -1,8 +1,9 @@
 package mapper
 
 import (
-	"fmt"
+	"go-psmp/config"
 	"go-psmp/pojo/entity"
+	"go-psmp/utils/json"
 )
 
 func FindUserByUsername(username string) entity.UserInfoEntity {
@@ -14,7 +15,7 @@ func FindUserByUsername(username string) entity.UserInfoEntity {
 		return res
 	}
 
-	fmt.Println(res)
+	config.Log.Info(json.ToJson(err))
 
 	return res
 }

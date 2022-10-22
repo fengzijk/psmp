@@ -1,7 +1,7 @@
 package mapper
 
 import (
-	"fmt"
+	"go-psmp/config"
 	"go-psmp/pojo/entity"
 	"go-psmp/pojo/model/page"
 	"go-psmp/utils"
@@ -23,7 +23,7 @@ func InsertEmailRecord(param entity.EmailRecordEntity) error {
 
 	err := deres.Error
 	if err != nil {
-		fmt.Printf("insert failed, err:%v\n", err)
+		config.Log.Info("insert failed, err:")
 		return err
 	}
 	return err
@@ -54,7 +54,7 @@ func UpdateEmailSendSuccess(ids []int64) {
 	deRes := db.Model(&entity.EmailRecordEntity{}).Where("id In ?", ids).Updates(entity.EmailRecordEntity{SendStatus: "SUCCESS"})
 	err := deRes.Error
 	if err != nil {
-		fmt.Printf("param failed, err:%v\n", err)
+		config.Log.Info("param failed, err:%v\n")
 
 	}
 }
@@ -73,7 +73,7 @@ func UpdateEmailSendFail(failList []entity.EmailRecordEntity) {
 		deRes := db.Model(&entity.EmailRecordEntity{}).Where("id=?", s.ID).Updates(s)
 		err := deRes.Error
 		if err != nil {
-			fmt.Printf("param failed, err:%v\n", err)
+			config.Log.Info("param failed, ")
 
 		}
 	}

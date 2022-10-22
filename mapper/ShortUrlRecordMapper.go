@@ -1,9 +1,10 @@
 package mapper
 
 import (
-	"fmt"
+	"go-psmp/config"
 	"go-psmp/pojo/entity"
 	"go-psmp/utils"
+	"go-psmp/utils/json"
 	"gorm.io/gorm"
 )
 
@@ -15,7 +16,7 @@ func InsertShortUrl(param entity.ShortURLEntity) error {
 		BizType:    param.BizType})
 	err := deres.Error
 	if err != nil {
-		fmt.Printf("insert failed, err:%v\n", err)
+		config.Log.Info("insert failed, err:%v\n")
 		return err
 	}
 	return err
@@ -28,7 +29,7 @@ func SelectShortUrlInfoById(id int) (entity.ShortURLEntity, error) {
 	if err != nil {
 		return shortURLEntity, err
 	}
-	fmt.Println(shortURLEntity)
+	config.Log.Info(json.ToJson(shortURLEntity))
 	return shortURLEntity, nil
 }
 
@@ -45,7 +46,7 @@ func SelectShortUrlInfoByParam(param string, paramType string) entity.ShortURLEn
 	if err != nil {
 		return shortURL
 	}
-	fmt.Println(shortURL)
+	config.Log.Info(json.ToJson(shortURL))
 	return shortURL
 }
 
@@ -57,7 +58,7 @@ func SelectShortUrlInfoByMd5Code(md5code string) entity.ShortURLEntity {
 	if err != nil {
 		return shortURL
 	}
-	fmt.Println(shortURL)
+	config.Log.Info(json.ToJson(shortURL))
 	return shortURL
 }
 
@@ -69,6 +70,6 @@ func SelectShortUrlInfoByShortParam(shortParam string) entity.ShortURLEntity {
 	if err != nil {
 		return shortURL
 	}
-	fmt.Println(shortURL)
+	config.Log.Info(json.ToJson(shortURL))
 	return shortURL
 }
