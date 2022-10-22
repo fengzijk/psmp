@@ -21,6 +21,9 @@ const (
 	sendWxPushLockKey = "lock:send_wx_task:"
 )
 
+var wxPushService = service.ServiceGroup.WxPushService
+var emailService = service.ServiceGroup.EmailService
+
 func InitTask() {
 
 	log.Println("[Cron] Starting...")
@@ -85,7 +88,7 @@ func sendEmailTask() {
 	var failList []entity.EmailRecordEntity
 	// 发送邮件
 	for i := 0; i < len(unSendList); i++ {
-		err := service.SendToMail(unSendList[i])
+		err := emailService.SendToMail(unSendList[i])
 
 		if err == nil {
 			successIds = append(successIds, unSendList[i].ID)
@@ -107,7 +110,7 @@ func sendEmailTask() {
 	}
 
 	// 更新邮件
-	service.UpdateEmailSendSuccess(successIds)
+	emailService.UpdateEmailSendSuccess(successIds)
 
 	// 更新失败
 	service.UpdateEmailSendFail(failList)
@@ -146,7 +149,7 @@ func SendWxPushTask() {
 	var failList []entity.WxPushRecordEntity
 	// 发送邮件
 	for i := 0; i < len(unSendList); i++ {
-		err := service.SendWxPushMessage(corpId, corpSecret, unSendList[i].ToUser, unSendList[i].ToPartyId, unSendList[i].Body, unSendList[i].AgentId)
+		err := wxPushService.SendWxPushMessage(corpId, corpSecret, unSendList[i].ToUser, unSendList[i].ToPartyId, unSendList[i].Body, unSendList[i].AgentId)
 		if err == "" {
 			successIds = append(successIds, unSendList[i].ID)
 			continue
@@ -167,8 +170,8 @@ func SendWxPushTask() {
 	}
 
 	// 更新邮件
-	service.UpdateWxPushSendSuccess(successIds)
+	wxPushService.UpdateWxPushSendSuccess(successIds)
 
 	// 更新失败
-	service.UpdateWxPushSendFail(failList)
+	wxPushService.UpdateWxPushSendFail(failList)
 }
