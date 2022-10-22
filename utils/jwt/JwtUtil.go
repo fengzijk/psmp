@@ -70,7 +70,7 @@ func (j *JWT) ParseToken(tokenString string) (*request.CustomClaims, int) {
 	}
 	if token != nil {
 		if claims, ok := token.Claims.(*request.CustomClaims); ok && token.Valid {
-			return claims, response.TokenExpired
+			return claims, response.SuccessCode
 		}
 		return nil, response.TokenInvalid
 
