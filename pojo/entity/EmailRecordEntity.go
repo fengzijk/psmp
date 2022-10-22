@@ -1,6 +1,8 @@
 package entity
 
-import "time"
+import (
+	"go-psmp/pojo/model"
+)
 
 type EmailRecordEntity struct {
 	// 主键id
@@ -16,8 +18,8 @@ type EmailRecordEntity struct {
 	SendFailCount int    `gorm:"type:int(3); NOT NULL ; default:0;  comment:发送失败次数"`
 	TemplateFlag  string `gorm:"type:varchar(8) ; NOT NULL; default :'HTML'; comment:HTML NORMAL"`
 
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	CreatedAt *model.LocalTime
+	UpdatedAt *model.LocalTime
 }
 
 // TableName 表名

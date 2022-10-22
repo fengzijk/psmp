@@ -7,13 +7,17 @@ import (
 	"go-psmp/config"
 	"go-psmp/mapper"
 	"go-psmp/pojo/entity"
+	"go-psmp/pojo/model/page"
 	"go-psmp/pojo/request"
 	"go-psmp/utils/short"
 	"log"
 	"strings"
 )
 
-func SendToMail(recordEntity entity.EmailRecordEntity) error {
+type EmailService struct {
+}
+
+func (emailService *EmailService) SendToMail(recordEntity entity.EmailRecordEntity) error {
 
 	var toUserListStr []string
 	var CcUserListStr []string
@@ -59,7 +63,7 @@ func SendToMail(recordEntity entity.EmailRecordEntity) error {
 	return err
 }
 
-func SaveMail(email request.SendEmailRequest) bool {
+func (emailService *EmailService) SaveMail(email request.SendEmailRequest) bool {
 
 	if len(email.ToUser) == 0 {
 		fmt.Println("Send mail error!,接收人为空")
@@ -80,16 +84,16 @@ func SaveMail(email request.SendEmailRequest) bool {
 	sendUserName := email.FromName //发送邮件的人名称
 	log.Println("send email")
 
-	saveEmailRecord(sendUserName, email.ToUser, email.CcUser, subject, email.Body, "HTML")
+	emailService.saveEmailRecord(sendUserName, email.ToUser, email.CcUser, subject, email.Body, "HTML")
 
 	return true
 }
 
-func UpdateEmailSendSuccess(ids []int64) {
+func (emailService *EmailService) UpdateEmailSendSuccess(ids []int64) {
 	mapper.UpdateEmailSendSuccess(ids)
 }
 
-func saveEmailRecord(sendUserName, emailTo, emailCc, subject, body, templateFlag string) {
+func (emailService *EmailService) saveEmailRecord(sendUserName, emailTo, emailCc, subject, body, templateFlag string) {
 
 	// 构造发送邮件记录
 	insert := entity.EmailRecordEntity{
@@ -116,13 +120,20 @@ func UpdateEmailSendFail(failList []entity.EmailRecordEntity) {
 	mapper.UpdateEmailSendFail(failList)
 }
 
+//	func getEmailToString(to []string) string {
+//		var bt bytes.Buffer
+//		for _, s := range to {
+//			bt.WriteString(s)
+//			bt.WriteString(";")
+//		}
+//		return bt.String()
 //
-//func getEmailToString(to []string) string {
-//	var bt bytes.Buffer
-//	for _, s := range to {
-//		bt.WriteString(s)
-//		bt.WriteString(";")
-//	}
-//	return bt.String()
-//
-//}
+// }
+func (emailService *EmailService) ListPageEmailByAdmin(status string, pageNum, pageSize int) *page.PagerModel {
+
+	unSendList, err := mapper.ListPageEmailByAdmin(status, pageNum, pageSize)
+	if err != nil {
+		return page.CreatePager(pageNum, pageSize, 0, entity.EmailRecordEntity{})
+	}
+	return unSendList
+}

@@ -5,10 +5,10 @@ import (
 	"go-psmp/controller"
 )
 
-func EmailRouter(router *gin.Engine) {
-	routerGroup := router.Group("/email")
+func EmailRouter(router *gin.RouterGroup) {
+	routerGroup := router.Group("/email-records")
 	{
 		routerGroup.POST("/:bizType/save", controller.SendEmail)
+		routerGroup.GET("/list-page", controller.ListPageEmailByAdmin)
 	}
-
 }
