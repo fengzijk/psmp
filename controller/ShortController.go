@@ -19,7 +19,7 @@ func CreateShort(c *gin.Context) {
 	content := request.ShortContentRequest{}
 	err := c.BindJSON(&content)
 	if err != nil {
-		c.JSON(http.StatusAlreadyReported, *response.Fail("失败"))
+		response.Fail("失败", c)
 	}
 
 	shortUrl := shortService.CreateShort(content.Content, enum.BizTypeEnum.GetMsg(enum.BizTypeEnum(content.BizType)))
@@ -28,12 +28,8 @@ func CreateShort(c *gin.Context) {
 	//var dto = request.SendEmailRequest{EmailTo: to, Subject: "aaaaa", Content: "http://baidu.com", SystemName: "monitor"}
 	//service.SaveMail("gzf", "guozhifengvip@163.com", "alarm", "http://baidu.com", "html")
 	//service.SaveMail(dto)
-	resp := response.ResponseResult{
-		Code: 200,
-		Msg:  "OK",
-		Data: shortUrl,
-	}
-	c.JSON(http.StatusOK, &resp)
+
+	response.Ok(shortUrl, c)
 }
 
 // Redirect 重定向
@@ -49,12 +45,8 @@ func Redirect(c *gin.Context) {
 			c.Redirect(http.StatusMovedPermanently, shortEntry.LongParam)
 
 		} else {
-			resp := response.ResponseResult{
-				Code: 200,
-				Msg:  "OK",
-				Data: shortEntry.LongParam,
-			}
-			c.JSON(http.StatusOK, &resp)
+
+			response.Ok(shortEntry.LongParam, c)
 		}
 	}
 }

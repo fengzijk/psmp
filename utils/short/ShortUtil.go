@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	"math/rand"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -16,6 +17,8 @@ var chars = [62]string{
 	"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
 	"M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X",
 	"Y", "Z"}
+
+var src = rand.NewSource(time.Now().UnixNano())
 
 func GetMd5Code(key string) string {
 	m := md5.New()
@@ -60,4 +63,50 @@ func GetShortParam(key string) string {
 	rand.Seed(time.Now().UnixNano())
 	r := rand.Intn(3)
 	return res[r]
+}
+
+/*
+RandAllString  生成随机字符串([a~zA~Z0~9])
+
+	lenNum 长度
+*/
+func RandAllString(lenNum int) string {
+	str := strings.Builder{}
+	length := len(chars)
+	rand.Seed(src.Int63())
+	for i := 0; i < lenNum; i++ {
+		l := chars[rand.Intn(length)]
+		str.WriteString(l)
+	}
+	return str.String()
+}
+
+/*
+RandNumString  生成随机数字字符串([0~9])
+
+	lenNum 长度
+*/
+func RandNumString(lenNum int) string {
+	str := strings.Builder{}
+	length := 10
+	rand.Seed(src.Int63())
+	for i := 0; i < lenNum; i++ {
+		str.WriteString(chars[26+rand.Intn(length)])
+	}
+	return str.String()
+}
+
+/*
+RandString  生成随机字符串(a~zA~Z])
+
+	lenNum 长度
+*/
+func RandString(lenNum int) string {
+	str := strings.Builder{}
+	length := 52
+	rand.Seed(src.Int63())
+	for i := 0; i < lenNum; i++ {
+		str.WriteString(chars[rand.Intn(length)])
+	}
+	return str.String()
 }

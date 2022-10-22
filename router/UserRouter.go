@@ -5,15 +5,10 @@ import (
 	"go-psmp/controller"
 )
 
-func UserLoginRouter(router *gin.Engine) {
-	PrivateGroup := router.Group("/manager")
-
-	//PrivateGroup.Use(handle.JWTAuth())
-	{
-		PrivateGroup.POST("/login", controller.Login)
-	}
+func UserLoginRouter(router *gin.RouterGroup) {
 
 	{
-		PrivateGroup.GET("/email-records/list-page", controller.ListPageEmailByAdmin)
+		router.POST("/login", controller.Login)
 	}
+
 }

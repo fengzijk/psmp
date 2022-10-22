@@ -5,7 +5,7 @@ import (
 	"go-psmp/controller"
 )
 
-func ShortRouter(router *gin.Engine) {
+func ShortRouter(router *gin.RouterGroup) {
 	routerGroup := router.Group("/st")
 	{
 		routerGroup.POST("/create", controller.CreateShort)
