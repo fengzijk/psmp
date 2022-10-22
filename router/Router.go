@@ -7,7 +7,7 @@ import (
 
 func InitRouter() *gin.Engine {
 	router := gin.Default()
-	gin.SetMode(gin.ReleaseMode)
+	//gin.SetMode(gin.ReleaseMode)
 	router.Use(handle.Cors(), gin.Recovery(), handle.Log())
 
 	// 短连接路由

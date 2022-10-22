@@ -22,8 +22,11 @@ const (
 	cacheShortKey = "short:key:"
 )
 
+type ShortService struct {
+}
+
 // CreateShort 生成短连接
-func CreateShort(param string, bizType string) string {
+func (shortService *ShortService) CreateShort(param string, bizType string) string {
 
 	var result string
 	var urlEntity entity.ShortURLEntity
@@ -89,7 +92,7 @@ func CreateShort(param string, bizType string) string {
 }
 
 // FindShortByByShortParam 根据实体查询短连接
-func FindShortByByShortParam(shortParam string) entity.ShortURLEntity {
+func (shortService *ShortService) FindShortByByShortParam(shortParam string) entity.ShortURLEntity {
 
 	var urlEntity entity.ShortURLEntity
 

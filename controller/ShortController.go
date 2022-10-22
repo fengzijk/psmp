@@ -12,6 +12,8 @@ import (
 
 type Response gin.H
 
+var shortService = service.ServiceGroup.ShortService
+
 func CreateShort(c *gin.Context) {
 
 	content := request.ShortContentRequest{}
@@ -20,13 +22,13 @@ func CreateShort(c *gin.Context) {
 		c.JSON(http.StatusAlreadyReported, *response.Fail("失败"))
 	}
 
-	shortUrl := service.CreateShort(content.Content, enum.BizTypeEnum.GetMsg(enum.BizTypeEnum(content.BizType)))
+	shortUrl := shortService.CreateShort(content.Content, enum.BizTypeEnum.GetMsg(enum.BizTypeEnum(content.BizType)))
 
 	//to := []string{"guozhifengvip@163.com"}
 	//var dto = request.SendEmailRequest{EmailTo: to, Subject: "aaaaa", Content: "http://baidu.com", SystemName: "monitor"}
 	//service.SaveMail("gzf", "guozhifengvip@163.com", "alarm", "http://baidu.com", "html")
 	//service.SaveMail(dto)
-	resp := response.Result{
+	resp := response.ResponseResult{
 		Code: 200,
 		Msg:  "OK",
 		Data: shortUrl,
@@ -39,7 +41,7 @@ func Redirect(c *gin.Context) {
 
 	shortParam := c.Param("param")
 
-	shortEntry := service.FindShortByByShortParam(shortParam)
+	shortEntry := shortService.FindShortByByShortParam(shortParam)
 
 	if shortEntry.LongParam != "" {
 
@@ -47,7 +49,7 @@ func Redirect(c *gin.Context) {
 			c.Redirect(http.StatusMovedPermanently, shortEntry.LongParam)
 
 		} else {
-			resp := response.Result{
+			resp := response.ResponseResult{
 				Code: 200,
 				Msg:  "OK",
 				Data: shortEntry.LongParam,

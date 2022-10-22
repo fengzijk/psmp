@@ -3,7 +3,9 @@ package mapper
 import (
 	"fmt"
 	"go-psmp/pojo/entity"
+	"go-psmp/pojo/model/page"
 	"go-psmp/utils"
+	"strings"
 )
 
 func InsertEmailRecord(param entity.EmailRecordEntity) error {
@@ -86,4 +88,20 @@ func FindEmailByMd5Code(md5code string) entity.EmailRecordEntity {
 		return emailEntity
 	}
 	return emailEntity
+}
+
+func ListPageEmailByAdmin(status string, pageNum, pageSize int) (*page.PagerModel, error) {
+	var emailList []entity.EmailRecordEntity
+	var count int64
+	if len(status) == 0 {
+		db.Model(&entity.EmailRecordEntity{}).Offset(-1).Limit(-1).Count(&count)
+		db.Model(&entity.EmailRecordEntity{}).Scopes(Paginate(pageNum, pageSize)).Order("created_at desc").Find(&emailList).Limit(pageSize)
+
+	} else {
+		db.Model(&entity.EmailRecordEntity{}).Where("send_status=?", strings.ToUpper(status)).Offset(-1).Limit(-1).Count(&count)
+		db.Model(&entity.EmailRecordEntity{}).Scopes(Paginate(pageNum, pageSize)).Where("send_status=?", strings.ToUpper(status)).Order("created_at  desc").Find(&emailList).Limit(pageSize)
+	}
+
+	pager := page.CreatePager(pageNum, pageSize, int(count), emailList)
+	return pager, nil
 }
