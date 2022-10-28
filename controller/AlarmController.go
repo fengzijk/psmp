@@ -24,7 +24,7 @@ func SendEmail(c *gin.Context) {
 
 	err := c.BindJSON(&dto)
 	if err != nil {
-		c.JSON(http.StatusAlreadyReported, *response.Fail("失败"))
+		response.Fail("失败", c)
 	}
 
 	notifyEmail(bizType, dto.Body)

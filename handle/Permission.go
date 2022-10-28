@@ -21,7 +21,7 @@ func UserAuthHandler() gin.HandlerFunc {
 			fmt.Print(obj, act)
 			c.Next()
 		} else {
-			response.FailMessage(response.AuthorizationError, response.Text(response.AuthorizationError))
+			response.FailMessage(response.AuthorizationError, response.Text(response.AuthorizationError), c)
 			c.Abort()
 			return
 		}

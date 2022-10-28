@@ -35,3 +35,4 @@ nbdist/
 /log/
 **/test/*
 **/idea/*
+!/log/
