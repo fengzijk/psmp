@@ -6,7 +6,10 @@ import (
 	"go-psmp/utils/json"
 )
 
-func FindUserByUsername(username string) entity.UserInfoEntity {
+type UserMapper struct {
+}
+
+func (userMapper *UserMapper) FindUserByUsername(username string) entity.UserInfoEntity {
 	var res entity.UserInfoEntity
 	find := db.Model(&entity.UserInfoEntity{}).Where("username = ?", username).Find(&res)
 

@@ -8,11 +8,13 @@ import (
 	"go-psmp/utils/short"
 )
 
+var userMapper = mapper.MapperGroup.UserMapper
+
 func LoginByUsername(loginReq request.UserLoginRequest) entity.UserInfoEntity {
 	if loginReq.UserName == "" || loginReq.Password == "" {
 		return entity.UserInfoEntity{}
 	}
-	user := mapper.FindUserByUsername(loginReq.UserName)
+	user := userMapper.FindUserByUsername(loginReq.UserName)
 
 	if user.ID == 0 || user.Username == "" {
 		return user

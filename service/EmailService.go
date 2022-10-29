@@ -17,6 +17,8 @@ import (
 type EmailService struct {
 }
 
+var emailMapper = mapper.MapperGroup.EmailRecordMapper
+
 func (emailService *EmailService) SendToMail(recordEntity entity.EmailRecordEntity) error {
 
 	var toUserListStr []string
@@ -90,7 +92,7 @@ func (emailService *EmailService) SaveMail(email request.SendEmailRequest) bool 
 }
 
 func (emailService *EmailService) UpdateEmailSendSuccess(ids []int64) {
-	mapper.UpdateEmailSendSuccess(ids)
+	emailMapper.UpdateEmailSendSuccess(ids)
 }
 
 func (emailService *EmailService) saveEmailRecord(sendUserName, emailTo, emailCc, subject, body, templateFlag string) {
@@ -108,16 +110,16 @@ func (emailService *EmailService) saveEmailRecord(sendUserName, emailTo, emailCc
 		TemplateFlag:  templateFlag,
 	}
 
-	recordEntity := mapper.FindEmailByMd5Code(insert.Md5Code)
+	recordEntity := emailMapper.FindEmailByMd5Code(insert.Md5Code)
 	if recordEntity.ID != 0 {
 		return
 	}
 
-	_ = mapper.InsertEmailRecord(insert)
+	_ = emailMapper.InsertEmailRecord(insert)
 }
 
 func UpdateEmailSendFail(failList []entity.EmailRecordEntity) {
-	mapper.UpdateEmailSendFail(failList)
+	emailMapper.UpdateEmailSendFail(failList)
 }
 
 //	func getEmailToString(to []string) string {
@@ -131,9 +133,15 @@ func UpdateEmailSendFail(failList []entity.EmailRecordEntity) {
 // }
 func (emailService *EmailService) ListPageEmailByAdmin(status string, pageNum, pageSize int) *page.PagerModel {
 
-	unSendList, err := mapper.ListPageEmailByAdmin(status, pageNum, pageSize)
+	unSendList, err := emailMapper.ListPageEmailByAdmin(status, pageNum, pageSize)
 	if err != nil {
 		return page.CreatePager(pageNum, pageSize, 0, entity.EmailRecordEntity{})
 	}
 	return unSendList
+}
+
+func (emailService *EmailService) FindUnSendList() ([]entity.EmailRecordEntity, error) {
+
+	return emailMapper.FindUnSendList()
+
 }

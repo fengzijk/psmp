@@ -6,6 +6,9 @@ import (
 	"go-psmp/utils"
 )
 
+type WxPushRecordMapper struct {
+}
+
 func InsertWxPushRecord(param entity.WxPushRecordEntity) error {
 	deres := db.Create(&entity.WxPushRecordEntity{ID: utils.NextId(),
 		Md5Code:       param.Md5Code,

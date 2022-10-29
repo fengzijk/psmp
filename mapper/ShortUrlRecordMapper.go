@@ -8,7 +8,10 @@ import (
 	"gorm.io/gorm"
 )
 
-func InsertShortUrl(param entity.ShortURLEntity) error {
+type ShortUrlRecordMapper struct {
+}
+
+func (shortMapper *ShortUrlRecordMapper) InsertShortUrl(param entity.ShortURLEntity) error {
 	deres := db.Create(&entity.ShortURLEntity{ID: utils.NextId(),
 		Md5Code:    param.Md5Code,
 		LongParam:  param.LongParam,
@@ -22,7 +25,7 @@ func InsertShortUrl(param entity.ShortURLEntity) error {
 	return err
 }
 
-func SelectShortUrlInfoById(id int) (entity.ShortURLEntity, error) {
+func (shortMapper *ShortUrlRecordMapper) SelectShortUrlInfoById(id int) (entity.ShortURLEntity, error) {
 	var shortURLEntity entity.ShortURLEntity
 	dbRes := db.Model(&entity.ShortURLEntity{}).Where("Id = ?", id).First(&shortURLEntity)
 	err := dbRes.Error
@@ -33,7 +36,7 @@ func SelectShortUrlInfoById(id int) (entity.ShortURLEntity, error) {
 	return shortURLEntity, nil
 }
 
-func SelectShortUrlInfoByParam(param string, paramType string) entity.ShortURLEntity {
+func (shortMapper *ShortUrlRecordMapper) SelectShortUrlInfoByParam(param string, paramType string) entity.ShortURLEntity {
 	var shortURL entity.ShortURLEntity
 	var dbRes *gorm.DB
 	if paramType == "url" {
@@ -50,7 +53,7 @@ func SelectShortUrlInfoByParam(param string, paramType string) entity.ShortURLEn
 	return shortURL
 }
 
-func SelectShortUrlInfoByMd5Code(md5code string) entity.ShortURLEntity {
+func (shortMapper *ShortUrlRecordMapper) SelectShortUrlInfoByMd5Code(md5code string) entity.ShortURLEntity {
 	var shortURL entity.ShortURLEntity
 	dbRes := db.Model(&entity.ShortURLEntity{}).Where("md5_code=? ", md5code).First(&shortURL)
 
@@ -62,7 +65,7 @@ func SelectShortUrlInfoByMd5Code(md5code string) entity.ShortURLEntity {
 	return shortURL
 }
 
-func SelectShortUrlInfoByShortParam(shortParam string) entity.ShortURLEntity {
+func (shortMapper *ShortUrlRecordMapper) SelectShortUrlInfoByShortParam(shortParam string) entity.ShortURLEntity {
 	var shortURL entity.ShortURLEntity
 	dbRes := db.Model(&entity.ShortURLEntity{}).Where("short_param=? ", shortParam).First(&shortURL)
 

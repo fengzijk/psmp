@@ -1,10 +1,10 @@
 package service
 
-type BaseGroup struct {
+type BaseServiceGroup struct {
 	EmailService
 	ShortService
 	WxPushService
 	JwtService
 }
 
-var ServiceGroup = new(BaseGroup)
+var ServiceGroup = new(BaseServiceGroup)

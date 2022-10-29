@@ -70,7 +70,7 @@ func sendEmailTask() {
 	defer redis.UnLock(lockKey)
 
 	// 查询邮件
-	unSendList, err := mapper.FindUnSendList()
+	unSendList, err := emailService.FindUnSendList()
 	if err != nil {
 		return
 	}

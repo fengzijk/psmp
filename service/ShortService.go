@@ -25,6 +25,8 @@ const (
 type ShortService struct {
 }
 
+var shortMapper = mapper.MapperGroup.ShortUrlRecordMapper
+
 // CreateShort 生成短连接
 func (shortService *ShortService) CreateShort(param string, bizType string) string {
 
@@ -51,7 +53,7 @@ func (shortService *ShortService) CreateShort(param string, bizType string) stri
 
 	// 数据库查询
 	if urlEntity.LongParam == "" {
-		urlEntity = mapper.SelectShortUrlInfoByMd5Code(md5Code)
+		urlEntity = shortMapper.SelectShortUrlInfoByMd5Code(md5Code)
 	}
 
 	// 存在返回结果
@@ -75,7 +77,7 @@ func (shortService *ShortService) CreateShort(param string, bizType string) stri
 		Md5Code:    md5Code,
 		BizType:    bizType,
 	}
-	err := mapper.InsertShortUrl(shortInfo)
+	err := shortMapper.InsertShortUrl(shortInfo)
 	if err != nil {
 		return ""
 	}
@@ -102,7 +104,7 @@ func (shortService *ShortService) FindShortByByShortParam(shortParam string) ent
 	if urlEntity.ID != 0 {
 		return urlEntity
 	} else {
-		urlEntity = mapper.SelectShortUrlInfoByShortParam(shortParam)
+		urlEntity = shortMapper.SelectShortUrlInfoByShortParam(shortParam)
 	}
 
 	if urlEntity.ID != 0 {

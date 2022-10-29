@@ -8,7 +8,10 @@ import (
 	"strings"
 )
 
-func InsertEmailRecord(param entity.EmailRecordEntity) error {
+type EmailRecordMapper struct {
+}
+
+func (emailMapper *EmailRecordMapper) InsertEmailRecord(param entity.EmailRecordEntity) error {
 	deres := db.Create(&entity.EmailRecordEntity{ID: utils.NextId(),
 		Md5Code:       param.Md5Code,
 		FromName:      param.FromName,
@@ -30,7 +33,7 @@ func InsertEmailRecord(param entity.EmailRecordEntity) error {
 }
 
 // FindUnSendList 查询未发送的邮件列表
-func FindUnSendList() ([]entity.EmailRecordEntity, error) {
+func (emailMapper *EmailRecordMapper) FindUnSendList() ([]entity.EmailRecordEntity, error) {
 	var emailList []entity.EmailRecordEntity
 	dbRes := db.Model(&entity.EmailRecordEntity{}).Where("send_status=?", "WAIT").Find(&emailList)
 
@@ -41,7 +44,7 @@ func FindUnSendList() ([]entity.EmailRecordEntity, error) {
 	return emailList, nil
 }
 
-func UpdateEmailSendSuccess(ids []int64) {
+func (emailMapper *EmailRecordMapper) UpdateEmailSendSuccess(ids []int64) {
 
 	if ids == nil {
 		return
@@ -59,7 +62,7 @@ func UpdateEmailSendSuccess(ids []int64) {
 	}
 }
 
-func UpdateEmailSendFail(failList []entity.EmailRecordEntity) {
+func (emailMapper *EmailRecordMapper) UpdateEmailSendFail(failList []entity.EmailRecordEntity) {
 
 	if failList == nil {
 		return
@@ -79,7 +82,7 @@ func UpdateEmailSendFail(failList []entity.EmailRecordEntity) {
 	}
 }
 
-func FindEmailByMd5Code(md5code string) entity.EmailRecordEntity {
+func (emailMapper *EmailRecordMapper) FindEmailByMd5Code(md5code string) entity.EmailRecordEntity {
 	var emailEntity entity.EmailRecordEntity
 	dbRes := db.Model(&entity.EmailRecordEntity{}).Where("md5_code=? ", md5code).First(&emailEntity)
 
@@ -90,7 +93,7 @@ func FindEmailByMd5Code(md5code string) entity.EmailRecordEntity {
 	return emailEntity
 }
 
-func ListPageEmailByAdmin(status string, pageNum, pageSize int) (*page.PagerModel, error) {
+func (emailMapper *EmailRecordMapper) ListPageEmailByAdmin(status string, pageNum, pageSize int) (*page.PagerModel, error) {
 	var emailList []entity.EmailRecordEntity
 	var count int64
 	if len(status) == 0 {
