@@ -5,6 +5,8 @@ type BaseServiceGroup struct {
 	ShortService
 	WxPushService
 	JwtService
+	LocalRemoteIPService
+	DingTalkService
 }
 
 var ServiceGroup = new(BaseServiceGroup)

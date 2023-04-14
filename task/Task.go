@@ -17,12 +17,15 @@ func newWithSeconds() *cron.Cron {
 }
 
 const (
-	sendEmailLockKey  = "lock:send_email_task:"
-	sendWxPushLockKey = "lock:send_wx_task:"
+	sendEmailLockKey     = "lock:send_email_task:"
+	sendWxPushLockKey    = "lock:send_wx_task:"
+	SendLocalIpChangeKey = "lock:send_local_ip_change_key"
 )
 
 var wxPushService = service.ServiceGroup.WxPushService
 var emailService = service.ServiceGroup.EmailService
+
+var localRemoteIPService = service.ServiceGroup.LocalRemoteIPService
 
 func InitTask() {
 
@@ -54,6 +57,15 @@ func InitTask() {
 		log.Println("[Cron] Run SendWxPushTask...")
 
 	})
+
+	// ip变化定时任务
+	sendIPChange := viper.GetString("task-cron.send-ip-change")
+	_, _ = c.AddFunc(sendIPChange, func() {
+		SendLocalIpChangeTask()
+		log.Println("[Cron] Run AgentHeartbeatAlarmTask...")
+
+	})
+
 	c.Start()
 }
 
@@ -174,4 +186,19 @@ func SendWxPushTask() {
 
 	// 更新失败
 	wxPushService.UpdateWxPushSendFail(failList)
+}
+func SendLocalIpChangeTask() {
+
+	var lockKey = SendLocalIpChangeKey
+	lock := redis.Lock(lockKey, 4)
+	if !lock {
+		log.Println("发送ip变化推送获取锁失败")
+		return
+	}
+
+	// 解锁
+	defer redis.UnLock(lockKey)
+
+	localRemoteIPService.SendIPChange()
+
 }

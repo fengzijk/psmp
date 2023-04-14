@@ -31,6 +31,9 @@ func init() {
 	// 第四步 初始化邮件
 	config.InitEmail()
 
+	// 初始化钉钉配置
+	config.InitDingTalkConf()
+
 	config.InitBaseConfig()
 	config.InitLogConf()
 }
@@ -57,6 +60,7 @@ func main() {
 		// 注册 model.LocalTime 类型的自定义校验规则
 		v.RegisterCustomTypeFunc(ValidateJSONDateType, model.LocalTime{})
 	}
+
 	port := viper.GetString("server.port")
 	fmt.Printf("监听端口:%s\n", port)
 	_ = initRouter.Run(fmt.Sprintf(":%s", port))

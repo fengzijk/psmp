@@ -14,10 +14,10 @@ import (
 )
 
 const (
-	path     = "st"
-	cacheKey = "short:md5code:"
-	http     = "http://"
-	https    = "https://"
+	path       = "st"
+	cacheKey   = "short:md5code:"
+	httpPrefix = "http://"
+	https      = "https://"
 
 	cacheShortKey = "short:key:"
 )
@@ -39,7 +39,7 @@ func (shortService *ShortService) CreateShort(param string, bizType string) stri
 	}
 
 	// https 截取
-	if strings.HasPrefix(param, http) || strings.HasPrefix(param, https) {
+	if strings.HasPrefix(param, httpPrefix) || strings.HasPrefix(param, https) {
 		bizType = enum.BizTypeEnum.GetMsg(2)
 	}
 

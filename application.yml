@@ -5,11 +5,11 @@ mysql:
   password: 123456
   host: 192.168.2.11
   port: 3306
-  database: short_url
+  database: psmp
 
 redis:
   address: 192.168.2.11:6379
-  database: 0
+  database: 1
   password: 123456
 short:
   prefix: http://localhost:8080
@@ -28,6 +28,7 @@ task-cron: #每5秒执行一次
   send-alarm-email: "*/5 * * * * *"
   agent-heartbeat-alarm: "*/5 * * * * *"
   send-alarm-wx: "*/5 * * * * *"
+  send-ip-change: "0 0/10 * ? * ?"
 
 # 告警通知给谁的邮件多个用;分割
 alarm-email:
@@ -66,3 +67,15 @@ zap:
   encode-level: LowercaseColorLevelEncoder
   stacktrace-key: stacktrace
   log-in-console: true
+
+dingTalk:
+  accessToken:
+  secret:
+  # 开启艾特
+  enableAt: true
+  #
+  atAll: false
+
+  atMobile:
+
+  password:

@@ -7,6 +7,8 @@ import (
 	"net/http"
 )
 
+// var dingTalkService = service.ServiceGroup.DingTalkService
+
 func AgentHeartbeat(c *gin.Context) {
 
 	agentIp := c.Param("agentIp")

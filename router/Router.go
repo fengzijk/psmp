@@ -19,6 +19,8 @@ func InitRouter() *gin.Engine {
 	ShortRouter(PrivateGroup)
 	// 登录路由
 	UserLoginRouter(OpenGroup)
+
+	SendMessageRouter(OpenGroup)
 	// Email路由
 	EmailRouter(PrivateGroup)
 

@@ -116,22 +116,6 @@ func (z *_zap) GetEncoderConfig() zapcore.EncoderConfig {
 	}
 }
 
-//
-//func (z *_zap) getZap() (logger *zap.Logger) {
-//	if ok, _ := file.PathExists(ZLog.Director); !ok { // 判断是否有Director文件夹
-//		fmt.Printf("create %v directory\n", ZLog.Director)
-//		_ = os.Mkdir(ZLog.Director, os.ModePerm)
-//	}
-//
-//	cores := z.GetZapCores()
-//	logger = zap.New(zapcore.NewTee(cores...))
-//
-//	if ZLog.ShowLine {
-//		logger = logger.WithOptions(zap.AddCaller())
-//	}
-//	return logger
-//}
-
 func (z *_zap) GetZapCores() []zapcore.Core {
 	cores := make([]zapcore.Core, 0, 7)
 	for level := ZLog.TransportLevel(); level <= zapcore.FatalLevel; level++ {

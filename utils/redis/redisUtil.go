@@ -30,7 +30,6 @@ func Get(key string) string {
 }
 
 func Set(key string, value string, seconds int) bool {
-
 	ex := redisExpired
 
 	if seconds > 0 {
